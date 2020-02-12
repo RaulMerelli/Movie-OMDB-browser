@@ -9,6 +9,10 @@ Software made in the italian language. You are free to edit it for your own purp
 
 ## How to get all working:
 
+-NuGet packeges needed:
+
+  Microsoft.AspNet.WebApi.Client
+
 
 -Amazon fonts needed to be included as resorces but not included in this repository.
 
