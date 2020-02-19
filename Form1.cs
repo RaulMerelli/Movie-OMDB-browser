@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
@@ -14,16 +14,14 @@ namespace Movie_omdb
     {
         int Nselected = 1;
         int pNselected = 1;
-        List<Button> buttons;
+        Button[] buttons;
         string CurrentSearchString;
         [DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
 
-        static string KEY = "&apikey=InsertYourApiKeyHere";
+        static string KEY = "&apikey=2405655c";
         HttpClient client = new HttpClient();
         SearchResult searchResult;
-        private const int ItemMargin = 5;
-        private const float PictureHeight = 50f;
         FontFamily AmazonEmber_Rg;
         FontFamily AmazonEmber_Lt;
         FontFamily AmazonEmber_Bd;
@@ -31,7 +29,7 @@ namespace Movie_omdb
         public Omdb_main()
         {
             InitializeComponent();
-            buttons = new List<Button> { b_1, b_2, b_3, b_4, b_5 };
+            buttons = new Button[5] { b_1, b_2, b_3, b_4, b_5 };
             CheckForIllegalCrossThreadCalls = false;
             AmazonEmber_Rg = InitCustomFont(Properties.Resources.AmazonEmber_Rg);
             AmazonEmber_Lt = InitCustomFont(Properties.Resources.AmazonEmber_Lt);
@@ -57,6 +55,25 @@ namespace Movie_omdb
             Nav_Buttons();
         }
 
+        //resetta la connessione dell'oggetto client. Così facendo si può aprire una nuova connessione
+        void ClientReset()
+        {
+            client = new HttpClient();
+            client.BaseAddress = new Uri("http://www.omdbapi.com/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        //svuota la listbox SearchList e la riempie con i nuovi dati SearchResult
+        void UpdateSearchList()
+        {
+            searchlist.Items.Clear(); //ripulire significa anche cambiare il SelectedIndex a -1. Questo scatena in modo non voluto gli eventi DrawItem e SelectedIndexChanged.
+            searchlist.Items.AddRange(searchResult.Search.ToArray());
+            searchlist.SelectedIndex = 0;
+            searchlist.Focus();
+        }
+
+        //Inizializza un nuovo font richiamabile da codice senza installarlo nel sistema a partire da un file ttf presente nelle risorse del progetto
         FontFamily InitCustomFont(byte[] font)
         {
             PrivateFontCollection pfc = new PrivateFontCollection();
@@ -71,65 +88,66 @@ namespace Movie_omdb
             return pfc.Families[0];
         }
 
+        //Evento scatenato dal click del pulsante cerca o dal tasto invio all'interno della textbox di ricerca
         private async void search_Click(object sender, EventArgs e)
         {
-            await RunAsync();
-            client = new HttpClient(); 
+            ClientReset();
+            try
+            {
+                ClearCurrentSearchString();
+                searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + KEY);
+                UpdateSearchList();
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
             Nselected = 1;
             Nav_Buttons();
         }
 
-        async Task RunAsync()
+        //Modifica la stringa di ricerca rimuovendo gli spazi in eccesso alla fine, trasformando quelli all'interno in + e rimuovendo le &
+        void ClearCurrentSearchString()
         {
-            client.BaseAddress = new Uri("http://www.omdbapi.com/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            try
+            CurrentSearchString = ricerca.Text.Replace(" ", "+");
+            CurrentSearchString = CurrentSearchString.Replace("&", "");
+            while (CurrentSearchString[CurrentSearchString.Length - 1] == '+')
             {
-                searchlist.Items.Clear();
-                CurrentSearchString = ricerca.Text.Replace(" ", "+");
-                searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + KEY);
-                label9.Text = searchResult.totalResults;
-                searchlist.Items.AddRange(searchResult.Search.ToArray());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
+                CurrentSearchString = CurrentSearchString.Substring(0, CurrentSearchString.Length - 1);
             }
         }
-
+        
+        //Ottiene a partire da un url contenente il relativo JSON un oggetto di tipo Movie
         async Task<Movie> GetMovieAsync(string path)
         {
-            Movie movie = null;
             HttpResponseMessage response = await client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
-                movie = await response.Content.ReadAsAsync<Movie>();
+                return await response.Content.ReadAsAsync<Movie>();
             }
-            return movie;
+            return null;
         }
 
+        //Ottiene a partire da un url contenente il relativo JSON un oggetto di tipo SearchResult
         async Task<SearchResult> GetSearchResultAsync(string path)
         {
-            SearchResult searchResult = null;
             HttpResponseMessage response = await client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
-                searchResult = await response.Content.ReadAsAsync<SearchResult>();
+                return await response.Content.ReadAsAsync<SearchResult>();
             }
-            return searchResult;
+            return null;
         }
 
         private void searchlist_SelectedIndexChanged(object sender, EventArgs e)
         {
-            generic_click(sender, e);
             int i = searchlist.SelectedIndex;
-            if (searchResult != null)
+            if (i != -1)
             {
-                if (searchResult.Search.Count > 0)
+                generic_click(sender, e);
+                if (searchResult != null)
                 {
-                    if (searchResult.Search[i].Poster!= "N/A")
+                    if (searchResult.Search[i].Poster != "N/A")
                     {
                         poster.ImageLocation = searchResult.Search[i].Poster;
                     }
@@ -141,6 +159,7 @@ namespace Movie_omdb
                     searchyear.Text = searchResult.Search[i].Year;
                     searchtype.Text = searchResult.Search[i].Type;
                 }
+
             }
         }
 
@@ -150,78 +169,56 @@ namespace Movie_omdb
             int x = poster.Location.X;
             double rapporto = h / 380.0;
             poster.Size = new Size((int)(300 * rapporto), h);
-            main.Location = new Point( x + (int)(300 * rapporto), main.Location.Y);
+            main.Location = new Point(x + (int)(300 * rapporto), main.Location.Y);
             detail.Location = main.Location;
         }
-        private void ListBox1_MeasureItem(object sender, MeasureItemEventArgs e)
-        {
-            e.ItemHeight = (int)(PictureHeight + 2 * ItemMargin);
-        }
 
-        private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
+        private void searchlist_DrawItem(object sender, DrawItemEventArgs e)
         {
-            // Get the ListBox and the items.
-            ListBox lst = (ListBox)sender;
-            if (lst.Items.Count > 0)
+            int ItemMargin = 5;
+            //Ottieni la lista di elementi a partire dalla listbox
+            var lst = (sender as ListBox).Items;
+            if (lst.Count > 0 && (sender as ListBox).SelectedIndex != -1)
             {
-                try
+                Search currentList = (Search)lst[e.Index];
+
+                //Disegna lo sfondo
+                e.DrawBackground();
+                Bitmap Image = new Bitmap(50, 50);
+                switch (currentList.Type)
                 {
-                    Search currentList = (Search)lst.Items[e.Index];
-
-                    // Draw the background.
-                    e.DrawBackground();
-                    Bitmap Image = new Bitmap(50, 50);
-                    switch (currentList.Type)
-                    {
-                        case "series":
-                            Image = Properties.Resources.series_icon;
-                            break;
-                        case "movie":
-                            Image = Properties.Resources.movie_icon;
-                            break;
-                        case "episode":
-                            Image = Properties.Resources.episode_icon;
-                            break;
-                        case "game":
-                            Image = Properties.Resources.game_icon;
-                            break;
-                    }
-
-                    // See if the item is selected.
-                    Brush brush = new SolidBrush(Color.Black);
-                    if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-                    {
-                        Graphics g = e.Graphics;
-                        SolidBrush backgroundColorBrush = new SolidBrush(Color.DarkOrange);
-                        g.FillRectangle(backgroundColorBrush, e.Bounds);
-
-                    }
-
-                    // Draw the picture.
-                    float scale = PictureHeight / Image.Height;
-                    RectangleF source_rect = new RectangleF(0, 0, Image.Width, Image.Height);
-                    float picture_width = scale * Image.Width;
-                    RectangleF dest_rect = new RectangleF(e.Bounds.Left + ItemMargin, e.Bounds.Top + ItemMargin, picture_width, PictureHeight);
-                    e.Graphics.DrawImage(Image, dest_rect, source_rect, GraphicsUnit.Pixel);
-
-                    // Find the area in which to put the text.
-                    float x = e.Bounds.Left + picture_width + 3 * ItemMargin;
-                    float y = e.Bounds.Top + ItemMargin;
-                    float width = e.Bounds.Right - ItemMargin - x;
-                    float height = e.Bounds.Bottom - ItemMargin - y;
-                    RectangleF layout_rect = new RectangleF(x, y, width, height + 5);
-
-                    // Draw the text.
-                    e.Graphics.DrawString(currentList.Title + '\n' + currentList.Year, new Font(AmazonEmber_Lt, 11), brush, layout_rect);
+                    case "series":
+                        Image = Properties.Resources.series_icon;
+                        break;
+                    case "movie":
+                        Image = Properties.Resources.movie_icon;
+                        break;
+                    case "episode":
+                        Image = Properties.Resources.episode_icon;
+                        break;
+                    case "game":
+                        Image = Properties.Resources.game_icon;
+                        break;
                 }
-                catch (Exception Error)
+
+                //Verifica se l'elemento è selezionato
+                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 {
-                    var dialog = MessageBox.Show(this, "Errore, probabilemte fatale.\nPer qualche motivo la ListBox ha generato un'eccezione nel disegnarne i contenuti.\n\nDi seguito il testo dell'errore:\n\n" + Error.Message + "\n\n\nContinuare l'esecuzione?", "Errore dovuto da eccezione", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                    if (dialog == DialogResult.No)
-                    {
-                        Close();
-                    }
+                    Graphics g = e.Graphics;
+                    SolidBrush backgroundColorBrush = new SolidBrush(Color.DarkOrange);
+                    g.FillRectangle(backgroundColorBrush, e.Bounds);
                 }
+
+                //Disegna l'immagine
+                Rectangle source_rect = new Rectangle(0, 0, 50, 50);
+                Rectangle dest_rect = new Rectangle(ItemMargin, e.Bounds.Top + ItemMargin, 50, 50);
+                e.Graphics.DrawImage(Image, dest_rect, source_rect, GraphicsUnit.Pixel);
+
+                //Trova l'area dove scrivere il testo.
+                Rectangle layout_rect = new Rectangle(65, e.Bounds.Top + ItemMargin, 262, 19);
+
+                //Disegna il testo.
+                e.Graphics.DrawString(currentList.Title, new Font(AmazonEmber_Lt, 11), new SolidBrush(Color.Black), layout_rect);
             }
         }
 
@@ -236,9 +233,10 @@ namespace Movie_omdb
         {
             Label label = sender as Label;
             label.ForeColor = Color.White;
-            label.Font = new Font(label.Font, label.Text[label.Text.Length-1]=='&' ? FontStyle.Underline : FontStyle.Regular);
+            label.Font = new Font(label.Font, label.Text[label.Text.Length - 1] == '&' ? FontStyle.Underline : FontStyle.Regular);
         }
 
+        //Intercetta i tasti premuti e se è invio simula il click del tasto search
         private void ricerca_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
@@ -269,10 +267,7 @@ namespace Movie_omdb
                 generic.Font = new Font(generic.Font, FontStyle.Regular);
                 details.Font = new Font(details.Font, FontStyle.Underline);
 
-                client = new HttpClient();
-                client.BaseAddress = new Uri("http://www.omdbapi.com/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ClientReset();
 
                 try
                 {
@@ -286,12 +281,10 @@ namespace Movie_omdb
                 {
                     Console.WriteLine(er.Message);
                 }
-                client = new HttpClient();
                 main.Visible = false;
                 detail.Visible = true;
             }
         }
-
 
         void reset_border_size()
         {
@@ -317,7 +310,7 @@ namespace Movie_omdb
             for (int i = from; i < from + lenght; i++)
             {
                 buttons[i].Text = (i == from) ? "<" : (i == from + lenght - 1) ? ">" : (i - from).ToString();
-                buttons[i].Font= new Font(AmazonEmber_Bd, buttons[i].Font.Size);
+                buttons[i].Font = new Font(AmazonEmber_Bd, buttons[i].Font.Size);
             }
         }
 
@@ -326,8 +319,8 @@ namespace Movie_omdb
             reset_border_size();
             if (total <= 3)
             {
-                buttons[0].Visible = total == 3 ? true : false;
-                buttons[4].Visible = total == 1 ? false : true;
+                buttons[0].Visible = total == 3;
+                buttons[4].Visible = total != 1;
                 switch (total)
                 {
                     case 1:
@@ -376,16 +369,22 @@ namespace Movie_omdb
             }
         }
 
-        private async void nav_click(object sender, EventArgs e)
+        int GetAll()
         {
             int all = 1;
-            string name = (sender as Button).Text;
             if (searchResult != null)
             {
                 int allresults = 1;
                 int.TryParse(searchResult.totalResults, out allresults);
                 all = (allresults / 10) + 1;
             }
+            return all;
+        }
+
+        private async void nav_click(object sender, EventArgs e)
+        {
+            int all = GetAll();
+            string name = (sender as Button).Text;
             if (name == ">" || name == "<")
             {
                 pNselected = Nselected;
@@ -398,28 +397,56 @@ namespace Movie_omdb
             }
             if (CurrentSearchString != "" && pNselected != Nselected)
             {
-                searchlist.Items.Clear();
-                client.BaseAddress = new Uri("http://www.omdbapi.com/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                searchResult = null;
-                searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + "&page=" + Nselected + KEY);
-                client = new HttpClient();
+                ClientReset();
                 edit(Nselected, all);
-                searchlist.Items.AddRange(searchResult.Search.ToArray());
+                searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + "&page=" + Nselected + KEY);
+                UpdateSearchList();
             }
         }
 
         void Nav_Buttons()
         {
-            int all = 1;
-            if (searchResult != null)
+            int all = GetAll();
+            if (Nselected <= all)
             {
-                int allresults = 1;
-                int.TryParse(searchResult.totalResults, out allresults);
-                all = (allresults / 10) + 1;
+                if (Nselected >= 1)
+                {
+                    edit(Nselected, all);
+                }
+                else
+                {
+                    Nselected = 1;
+                }
             }
-            edit(Nselected, all);
+            else
+            {
+                Nselected = all;
+            }
+        }
+
+        private void searchlist_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private async void searchlist_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
+            {
+                pNselected = Nselected;
+                Nselected += e.KeyCode == Keys.Right ? 1 : -1;
+
+                Nav_Buttons();
+                if (CurrentSearchString != "" && pNselected != Nselected)
+                {
+                    ClientReset();
+                    searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + "&page=" + Nselected + KEY);
+                    UpdateSearchList();
+                }
+            }
         }
     }
 }
