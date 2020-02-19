@@ -1,4 +1,4 @@
-﻿namespace Movie_omdb
+namespace Movie_omdb
 {
     partial class Omdb_main
     {
@@ -47,7 +47,6 @@
             this.details = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.detail = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -134,9 +133,10 @@
             this.searchlist.Name = "searchlist";
             this.searchlist.Size = new System.Drawing.Size(349, 168);
             this.searchlist.TabIndex = 9;
-            this.searchlist.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBox1_DrawItem);
-            this.searchlist.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.ListBox1_MeasureItem);
+            this.searchlist.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.searchlist_DrawItem);
             this.searchlist.SelectedIndexChanged += new System.EventHandler(this.searchlist_SelectedIndexChanged);
+            this.searchlist.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchlist_KeyDown);
+            this.searchlist.KeyUp += new System.Windows.Forms.KeyEventHandler(this.searchlist_KeyUp);
             // 
             // label2
             // 
@@ -293,18 +293,6 @@
             this.pictureBox5.TabIndex = 24;
             this.pictureBox5.TabStop = false;
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Gray;
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(604, 13);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(35, 13);
-            this.label9.TabIndex = 24;
-            this.label9.Text = "label9";
-            this.label9.Visible = false;
-            // 
             // detail
             // 
             this.detail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -460,6 +448,7 @@
             // 
             this.poster.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.poster.ErrorImage = global::Movie_omdb.Properties.Resources.no_img;
             this.poster.Location = new System.Drawing.Point(367, 67);
             this.poster.MaximumSize = new System.Drawing.Size(300, 380);
             this.poster.MinimumSize = new System.Drawing.Size(165, 209);
@@ -539,7 +528,6 @@
             this.ClientSize = new System.Drawing.Size(890, 374);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.detail);
-            this.Controls.Add(this.label9);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.details);
             this.Controls.Add(this.generic);
@@ -597,7 +585,6 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.PictureBox pictureBox5;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Panel detail;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
@@ -612,4 +599,3 @@
         private System.Windows.Forms.Panel panel2;
     }
 }
-
