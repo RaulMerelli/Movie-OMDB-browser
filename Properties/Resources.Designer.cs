@@ -185,7 +185,7 @@ namespace Movie_omdb.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap search_right {
             get {
-                object obj = ResourceManager.GetObject("search-right", resourceCulture);
+                object obj = ResourceManager.GetObject("search_right", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

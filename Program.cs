@@ -15,14 +15,7 @@ namespace Movie_omdb
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            try
-            {
-                Application.Run(new Omdb_main());
-            }
-            catch (Exception error)
-            {
-                System.Diagnostics.Debug.WriteLine(error.Message);
-            }
+            Application.Run(new Omdb_main());
         }
     }
 

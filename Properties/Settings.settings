@@ -1,7 +1,24 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Movie_omdb.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="customColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">DarkOrange</Value>
+    </Setting>
+    <Setting Name="foreColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Black</Value>
+    </Setting>
+    <Setting Name="barColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">DimGray</Value>
+    </Setting>
+    <Setting Name="backColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">DarkGray</Value>
+    </Setting>
+    <Setting Name="listColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Silver</Value>
+    </Setting>
+    <Setting Name="styles" Type="System.String" Scope="User">
+      <Value Profile="(Default)">default;DarkOrange,Black,DimGray,DarkGray,Silver-amazon;#FEBD69,Black,#232F3F,#EAEDED,White-uci;#FFD900,Black,#00244D,#001C38,#003B7A-netflix;#B9090B,Black,Black,#1C1C1C,#252525-imdb;#F5C518,Black,#121212,Black,#101010-style1;#95A5AE,White,#517A94,#333333,#272727-rai;#29A2FF,Black,#000099,White,White</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

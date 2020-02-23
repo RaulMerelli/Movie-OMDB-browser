@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,6 +17,7 @@ namespace Movie_omdb
         int pNselected = 1;
         Button[] buttons;
         string CurrentSearchString;
+
         [DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
 
@@ -25,6 +27,7 @@ namespace Movie_omdb
         FontFamily AmazonEmber_Rg;
         FontFamily AmazonEmber_Lt;
         FontFamily AmazonEmber_Bd;
+        List<string[]> styles;
 
         public Omdb_main()
         {
@@ -34,12 +37,16 @@ namespace Movie_omdb
             AmazonEmber_Rg = InitCustomFont(Properties.Resources.AmazonEmber_Rg);
             AmazonEmber_Lt = InitCustomFont(Properties.Resources.AmazonEmber_Lt);
             AmazonEmber_Bd = InitCustomFont(Properties.Resources.AmazonEmber_Bd);
+            UpdateColor();
 
-            label4.Font = new Font(AmazonEmber_Bd, label4.Font.Size);
             label5.Font = new Font(AmazonEmber_Bd, label5.Font.Size);
             label6.Font = new Font(AmazonEmber_Bd, label6.Font.Size);
-            label7.Font = new Font(AmazonEmber_Bd, label7.Font.Size);
-            label8.Font = new Font(AmazonEmber_Bd, label8.Font.Size);
+            desc_1.Font = new Font(AmazonEmber_Bd, desc_1.Font.Size);
+            desc_2.Font = new Font(AmazonEmber_Bd, desc_2.Font.Size);
+            desc_3.Font = new Font(AmazonEmber_Bd, desc_3.Font.Size);
+            desc_4.Font = new Font(AmazonEmber_Bd, desc_4.Font.Size);
+            desc_5.Font = new Font(AmazonEmber_Bd, desc_5.Font.Size);
+            desc_6.Font = new Font(AmazonEmber_Bd, desc_6.Font.Size);
             label2.Font = new Font(AmazonEmber_Bd, label2.Font.Size);
             generic.Font = new Font(AmazonEmber_Bd, generic.Font.Size, FontStyle.Underline);
             details.Font = new Font(AmazonEmber_Bd, details.Font.Size);
@@ -48,11 +55,274 @@ namespace Movie_omdb
             title.Font = new Font(AmazonEmber_Lt, title.Font.Size);
             year.Font = new Font(AmazonEmber_Lt, year.Font.Size);
             rated.Font = new Font(AmazonEmber_Lt, rated.Font.Size);
+            released.Font = new Font(AmazonEmber_Lt, released.Font.Size);
+            runtime.Font = new Font(AmazonEmber_Lt, runtime.Font.Size);
+            genre.Font = new Font(AmazonEmber_Lt, genre.Font.Size);
             searchtitle.Font = new Font(AmazonEmber_Lt, searchtitle.Font.Size);
             searchyear.Font = new Font(AmazonEmber_Lt, searchyear.Font.Size);
             searchtype.Font = new Font(AmazonEmber_Lt, searchtype.Font.Size);
 
             Nav_Buttons();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Properties.Settings.Default.Save();
+            base.OnClosed(e);
+        }
+
+        void UpdateBarColor()
+        {
+            Bitmap bitmap = Properties.Resources.search_left;
+            Bitmap bitmap2 = Properties.Resources.search_right;
+            ChangeColor(bitmap, Color.Black, Properties.Settings.Default.barColor);
+            ChangeColor(bitmap2, Color.Black, Properties.Settings.Default.barColor);
+            pictureBox5.Image = bitmap;
+            search.BackgroundImage = bitmap2;
+            pictureBox4.BackColor = Properties.Settings.Default.barColor;
+            generic.BackColor = Properties.Settings.Default.barColor;
+            details.BackColor = Properties.Settings.Default.barColor;
+            pictureBox3.BackColor = Properties.Settings.Default.barColor;
+        }
+
+        void UpdateBackColor()
+        {
+            Color color = WhiteOrBlack(Properties.Settings.Default.backColor);
+            poster.BackColor = Properties.Settings.Default.backColor;
+            BackColor = Properties.Settings.Default.backColor;
+            detail.BackColor = Properties.Settings.Default.backColor;
+            detail.ForeColor = color;
+            main.BackColor = Properties.Settings.Default.backColor;
+            main.ForeColor = color;
+
+            Bitmap bitmap = Properties.Resources.list_top;
+            Bitmap bitmap2 = Properties.Resources.list_bottom;
+            ChangeColor(bitmap, Color.Black, Properties.Settings.Default.backColor);
+            ChangeColor(bitmap2, Color.Black, Properties.Settings.Default.backColor);
+            pictureBox1.BackgroundImage = bitmap;
+            pictureBox1.BackColor = Properties.Settings.Default.listColor;
+            pictureBox2.BackgroundImage = bitmap2;
+        }
+
+        //permette di cambiare i colori in runtime. E' sufficiente scrivere ad esempio color=Pink o color=#AA4521
+        void UpdateColor(string Command)
+        {
+            if (Command.ToLower().Contains("color="))
+            {
+                if (Command.ToLower() == "color=default")
+                {
+                    Properties.Settings.Default.customColor = Color.DarkOrange;
+                    search.BackColor = Properties.Settings.Default.customColor;
+                    Properties.Settings.Default.foreColor = Color.Black;
+                    search.Image = Properties.Resources.search_icon;
+                }
+                else if (Command.ToLower() == "barcolor=default")
+                {
+                    Properties.Settings.Default.barColor = Color.DimGray;
+                }
+                else if (Command.ToLower() == "backcolor=default")
+                {
+                    Properties.Settings.Default.backColor = Color.DarkGray;
+                }
+                else if (Command.ToLower() == "listcolor=default")
+                {
+                    Properties.Settings.Default.listColor = Color.Silver;
+                }
+                else if (Command.ToLower().Substring(0, 4) == "back")
+                {
+                    string hex = Command.Remove(0, 10);
+                    try
+                    {
+                        Properties.Settings.Default.backColor = ColorTranslator.FromHtml(hex);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    if (Properties.Settings.Default.backColor.A < 255)
+                    {
+                        Properties.Settings.Default.backColor = Color.FromArgb(255, Properties.Settings.Default.backColor);
+                    }
+                }
+                else if (Command.ToLower().Substring(0, 4) == "list")
+                {
+                    string hex = Command.Remove(0, 10);
+                    try
+                    {
+                        Properties.Settings.Default.listColor = ColorTranslator.FromHtml(hex);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    if (Properties.Settings.Default.backColor.A < 255)
+                    {
+                        Properties.Settings.Default.listColor = Color.FromArgb(255, Properties.Settings.Default.backColor);
+                    }
+                }
+                else if (Command.ToLower().Substring(0, 3) != "bar")
+                {
+                    string hex = Command.Remove(0, 6);
+                    try
+                    {
+                        Properties.Settings.Default.customColor = ColorTranslator.FromHtml(hex);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    if (Properties.Settings.Default.customColor.A < 255)
+                    {
+                        Properties.Settings.Default.customColor = Color.FromArgb(255, Properties.Settings.Default.customColor);
+                    }
+                    Properties.Settings.Default.foreColor = WhiteOrBlack(Properties.Settings.Default.customColor);
+                }
+                else
+                {
+                    string hex = Command.Remove(0, 9);
+                    try
+                    {
+                        Properties.Settings.Default.barColor = ColorTranslator.FromHtml(hex);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    if (Properties.Settings.Default.barColor.A < 255)
+                    {
+                        Properties.Settings.Default.barColor = Color.FromArgb(255, Properties.Settings.Default.barColor);
+                    }
+                }
+            }
+            else if (Command.ToLower().Contains("style="))
+            {
+                if (Command.ToLower().Contains("savestyle="))
+                {
+                    Properties.Settings.Default.styles += "-" + Command.Remove(0, 10) + ";" + ColorTranslator.ToHtml(Properties.Settings.Default.customColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.foreColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.barColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.backColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.listColor);
+                    MessageBox.Show("Stile salvato come '" + Command.Remove(0, 10) + "'.");
+                }
+                else if (Command.ToLower().Contains("deletestyle="))
+                {
+                    string temp = "";
+                    string todelete = Command.Remove(0, 12);
+
+                    string[] lines = Properties.Settings.Default.styles.Split('-');
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        string currentLine1 = lines[i];
+                        string[] couple = currentLine1.Split(';');
+                        if (couple[0] != todelete)
+                        {
+                            temp += "-" + lines[i];
+                        }
+                    }
+                    temp.Remove(0, 1);
+                    Properties.Settings.Default.styles = temp; 
+                    MessageBox.Show("Stile eliminato: '" + todelete + "'.");
+
+                }
+                else
+                {
+                    string style = Command.Remove(0, 6);
+                    string[] lines = Properties.Settings.Default.styles.Split('-');
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        string currentLine1 = lines[i];
+                        string[] couple = currentLine1.Split(';');
+                        if (couple[0] == style)
+                        {
+                            ChangeStyle(couple[1]);
+                        }
+                    }
+                }
+            }
+            UpdateColor();
+        }
+
+        void ChangeStyle(string colors)
+        {
+            string[] colorList = colors.Split(',');
+            Properties.Settings.Default.customColor = ColorTranslator.FromHtml(colorList[0]);
+            Properties.Settings.Default.foreColor = ColorTranslator.FromHtml(colorList[1]);
+            Properties.Settings.Default.barColor = ColorTranslator.FromHtml(colorList[2]);
+            Properties.Settings.Default.backColor = ColorTranslator.FromHtml(colorList[3]);
+            Properties.Settings.Default.listColor = ColorTranslator.FromHtml(colorList[4]);
+        }
+
+        void UpdateColor()
+        {
+            if (Properties.Settings.Default.foreColor == Color.Black)
+            {
+                search.Image = Properties.Resources.search_icon;
+            }
+            else
+            {
+                Bitmap bitmap = new Bitmap(Properties.Resources.search_icon);
+                Invert(bitmap);
+                search.Image = bitmap;
+            }
+            search.BackColor = Properties.Settings.Default.customColor;
+            UpdateBackColor();
+            UpdateBarColor();
+            panel1.BackColor = Properties.Settings.Default.listColor;
+            searchlist.BackColor = Properties.Settings.Default.listColor;
+            int all = GetAll();
+            edit(Nselected, all);
+            searchlist.Focus();
+        }
+
+        void ChangeColor(Bitmap bitmapImage, Color oldColor, Color newColor)
+        {
+            var bitmapRead = bitmapImage.LockBits(new Rectangle(0, 0, bitmapImage.Width, bitmapImage.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);
+            var bitmapLength = bitmapRead.Stride * bitmapRead.Height;
+            var bitmapBGRA = new byte[bitmapLength];
+            Marshal.Copy(bitmapRead.Scan0, bitmapBGRA, 0, bitmapLength);
+            bitmapImage.UnlockBits(bitmapRead);
+
+            for (int i = 0; i < bitmapLength; i += 4)
+            {
+                Color color = Color.FromArgb(bitmapBGRA[i + 2], bitmapBGRA[i + 1], bitmapBGRA[i]);
+                if (color.ToArgb() == oldColor.ToArgb())
+                {
+                    bitmapBGRA[i] = newColor.B;
+                    bitmapBGRA[i + 1] = newColor.G;
+                    bitmapBGRA[i + 2] = newColor.R;
+                }
+            }
+
+            var bitmapWrite = bitmapImage.LockBits(new Rectangle(0, 0, bitmapImage.Width, bitmapImage.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            Marshal.Copy(bitmapBGRA, 0, bitmapWrite.Scan0, bitmapLength);
+            bitmapImage.UnlockBits(bitmapWrite);
+        }
+
+        public static void Invert(Bitmap bitmapImage)
+        {
+            var bitmapRead = bitmapImage.LockBits(new Rectangle(0, 0, bitmapImage.Width, bitmapImage.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);
+            var bitmapLength = bitmapRead.Stride * bitmapRead.Height;
+            var bitmapBGRA = new byte[bitmapLength];
+            Marshal.Copy(bitmapRead.Scan0, bitmapBGRA, 0, bitmapLength);
+            bitmapImage.UnlockBits(bitmapRead);
+
+            for (int i = 0; i < bitmapLength; i += 4)
+            {
+                bitmapBGRA[i] = (byte)(255 - bitmapBGRA[i]);
+                bitmapBGRA[i + 1] = (byte)(255 - bitmapBGRA[i + 1]);
+                bitmapBGRA[i + 2] = (byte)(255 - bitmapBGRA[i + 2]);
+                //        [i + 3] = ALPHA.
+            }
+
+            var bitmapWrite = bitmapImage.LockBits(new Rectangle(0, 0, bitmapImage.Width, bitmapImage.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppPArgb);
+            Marshal.Copy(bitmapBGRA, 0, bitmapWrite.Scan0, bitmapLength);
+            bitmapImage.UnlockBits(bitmapWrite);
+        }
+
+        Color WhiteOrBlack(Color c)
+        {
+            return (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114) > 130 ? Color.Black : Color.White;
         }
 
         //resetta la connessione dell'oggetto client. Così facendo si può aprire una nuova connessione
@@ -91,19 +361,26 @@ namespace Movie_omdb
         //Evento scatenato dal click del pulsante cerca o dal tasto invio all'interno della textbox di ricerca
         private async void search_Click(object sender, EventArgs e)
         {
-            ClientReset();
-            try
+            if(ricerca.Text.ToLower().Contains("color=") || ricerca.Text.ToLower().Contains("style="))
             {
-                ClearCurrentSearchString();
-                searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + KEY);
-                UpdateSearchList();
+                UpdateColor(ricerca.Text);
             }
-            catch (Exception err)
+            else
             {
-                Console.WriteLine(err.Message);
+                ClientReset();
+                try
+                {
+                    ClearCurrentSearchString();
+                    searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + KEY);
+                    UpdateSearchList();
+                }
+                catch (Exception err)
+                {
+                    Console.WriteLine(err.Message);
+                }
+                Nselected = 1;
+                Nav_Buttons();
             }
-            Nselected = 1;
-            Nav_Buttons();
         }
 
         //Modifica la stringa di ricerca rimuovendo gli spazi in eccesso alla fine, trasformando quelli all'interno in + e rimuovendo le &
@@ -178,11 +455,12 @@ namespace Movie_omdb
             int ItemMargin = 5;
             //Ottieni la lista di elementi a partire dalla listbox
             var lst = (sender as ListBox).Items;
+            Color localForeColor = Color.Black;
             if (lst.Count > 0 && (sender as ListBox).SelectedIndex != -1)
             {
                 Search currentList = (Search)lst[e.Index];
 
-                //Disegna lo sfondo
+                //Sceglie immagine
                 e.DrawBackground();
                 Bitmap Image = new Bitmap(50, 50);
                 switch (currentList.Type)
@@ -205,8 +483,16 @@ namespace Movie_omdb
                 if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 {
                     Graphics g = e.Graphics;
-                    SolidBrush backgroundColorBrush = new SolidBrush(Color.DarkOrange);
-                    g.FillRectangle(backgroundColorBrush, e.Bounds);
+                    g.FillRectangle(new SolidBrush(Properties.Settings.Default.customColor), e.Bounds);
+                    localForeColor = Properties.Settings.Default.foreColor;
+                }
+                else
+                {
+                    localForeColor = WhiteOrBlack(Properties.Settings.Default.listColor);
+                }
+                if (localForeColor == Color.White)
+                {
+                    Invert(Image);
                 }
 
                 //Disegna l'immagine
@@ -218,7 +504,7 @@ namespace Movie_omdb
                 Rectangle layout_rect = new Rectangle(65, e.Bounds.Top + ItemMargin, 262, 19);
 
                 //Disegna il testo.
-                e.Graphics.DrawString(currentList.Title, new Font(AmazonEmber_Lt, 11), new SolidBrush(Color.Black), layout_rect);
+                e.Graphics.DrawString(currentList.Title, new Font(AmazonEmber_Lt, 11), new SolidBrush(localForeColor), layout_rect);
             }
         }
 
@@ -276,6 +562,9 @@ namespace Movie_omdb
                     title.Text = movie.Title;
                     year.Text = movie.Year;
                     rated.Text = movie.Rated;
+                    released.Text = movie.Released;
+                    runtime.Text = movie.Runtime;
+                    genre.Text = movie.Genre;
                 }
                 catch (Exception er)
                 {
@@ -288,11 +577,15 @@ namespace Movie_omdb
 
         void reset_border_size()
         {
+            Color BW = WhiteOrBlack(Properties.Settings.Default.barColor);
             foreach (var button in buttons)
             {
+                Bitmap bitmap = Properties.Resources.page_button;
+                ChangeColor(bitmap, Color.Black, Properties.Settings.Default.backColor);
+                button.BackgroundImage = bitmap;
                 button.FlatAppearance.BorderSize = 0;
-                button.BackColor = Color.Gray;
-                button.ForeColor = Color.White;
+                button.BackColor = Properties.Settings.Default.barColor;
+                button.ForeColor = BW;
                 button.FlatAppearance.MouseDownBackColor = Color.DimGray;
             }
         }
@@ -300,9 +593,9 @@ namespace Movie_omdb
         void set_selected(Button button)
         {
             button.FlatAppearance.BorderSize = 0;
-            button.BackColor = Color.FromArgb(255, 140, 0);
-            button.ForeColor = Color.Black;
-            button.FlatAppearance.MouseDownBackColor = Color.FromArgb(229, 178, 114);
+            button.BackColor = Properties.Settings.Default.customColor;
+            button.ForeColor = Properties.Settings.Default.foreColor;
+            button.FlatAppearance.MouseDownBackColor = search.FlatAppearance.MouseDownBackColor;
         }
 
         void generate(int from, int lenght)
@@ -424,6 +717,7 @@ namespace Movie_omdb
             }
         }
 
+        //evento invocato dalla pressione di un tasto all'interno della listbox. Il codice contenuto permette di far gestire i tasti freccia destra e sinistra in modo disverso dal default.
         private void searchlist_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
@@ -432,6 +726,7 @@ namespace Movie_omdb
             }
         }
 
+        //questo evento si scatenza appena un tasto è finito di premere. Con questo evento possiam oquindi gestire i tasti freccia destra e sinistra come vogliamo
         private async void searchlist_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)

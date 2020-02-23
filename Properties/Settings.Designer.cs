@@ -22,5 +22,77 @@ namespace Movie_omdb.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DarkOrange")]
+        public global::System.Drawing.Color customColor {
+            get {
+                return ((global::System.Drawing.Color)(this["customColor"]));
+            }
+            set {
+                this["customColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color foreColor {
+            get {
+                return ((global::System.Drawing.Color)(this["foreColor"]));
+            }
+            set {
+                this["foreColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DimGray")]
+        public global::System.Drawing.Color barColor {
+            get {
+                return ((global::System.Drawing.Color)(this["barColor"]));
+            }
+            set {
+                this["barColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DarkGray")]
+        public global::System.Drawing.Color backColor {
+            get {
+                return ((global::System.Drawing.Color)(this["backColor"]));
+            }
+            set {
+                this["backColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Silver")]
+        public global::System.Drawing.Color listColor {
+            get {
+                return ((global::System.Drawing.Color)(this["listColor"]));
+            }
+            set {
+                this["listColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"default;DarkOrange,Black,DimGray,DarkGray,Silver-amazon;#FEBD69,Black,#232F3F,#EAEDED,White-uci;#FFD900,Black,#00244D,#001C38,#003B7A-netflix;#B9090B,Black,Black,#1C1C1C,#252525-imdb;#F5C518,Black,#121212,Black,#101010-style1;#95A5AE,White,#517A94,#333333,#272727-rai;#29A2FF,Black,#000099,White,White")]
+        public string styles {
+            get {
+                return ((string)(this["styles"]));
+            }
+            set {
+                this["styles"] = value;
+            }
+        }
     }
 }

@@ -148,9 +148,6 @@
   <data name="no_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\no_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="search-right" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\search-right.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="AmazonEmber_Bd" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AmazonEmber_Bd.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -162,5 +159,8 @@
   </data>
   <data name="page_button" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\page_button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="search_right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\search-right.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
