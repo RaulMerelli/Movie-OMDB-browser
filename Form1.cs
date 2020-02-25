@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -24,7 +24,7 @@ namespace Movie_omdb
         [DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
 
-        static string KEY = "&apikey=2405655c";
+        static string KEY = "&apikey=InsertYourApiKeyHere";
         HttpClient client = new HttpClient();
         SearchResult searchResult;
         FontFamily AmazonEmber_Rg;
