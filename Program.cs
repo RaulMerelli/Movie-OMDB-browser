@@ -19,7 +19,6 @@ namespace Movie_omdb
         }
     }
 
-
     public class Search
     {
         public string Title { get; set; }
@@ -70,5 +69,4 @@ namespace Movie_omdb
         public string Website { get; set; }
         public string Response { get; set; }
     }
-
 }

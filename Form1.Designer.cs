@@ -35,10 +35,10 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.searchtitle = new System.Windows.Forms.Label();
             this.searchyear = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.desc_m_3 = new System.Windows.Forms.Label();
             this.searchtype = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.desc_m_2 = new System.Windows.Forms.Label();
+            this.desc_m_1 = new System.Windows.Forms.Label();
             this.main = new System.Windows.Forms.Panel();
             this.rated = new System.Windows.Forms.Label();
             this.year = new System.Windows.Forms.Label();
@@ -145,12 +145,12 @@
             // 
             // searchtitle
             // 
-            this.searchtitle.AutoSize = true;
+            this.searchtitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.searchtitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchtitle.Location = new System.Drawing.Point(61, 5);
-            this.searchtitle.MaximumSize = new System.Drawing.Size(160, 90);
             this.searchtitle.Name = "searchtitle";
-            this.searchtitle.Size = new System.Drawing.Size(11, 22);
+            this.searchtitle.Size = new System.Drawing.Size(225, 54);
             this.searchtitle.TabIndex = 13;
             this.searchtitle.Text = "-";
             this.searchtitle.UseCompatibleTextRendering = true;
@@ -166,16 +166,16 @@
             this.searchyear.Text = "-";
             this.searchyear.UseCompatibleTextRendering = true;
             // 
-            // label6
+            // desc_m_3
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(3, 81);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(44, 22);
-            this.label6.TabIndex = 12;
-            this.label6.Text = "Tipo: ";
-            this.label6.UseCompatibleTextRendering = true;
+            this.desc_m_3.AutoSize = true;
+            this.desc_m_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_m_3.Location = new System.Drawing.Point(3, 81);
+            this.desc_m_3.Name = "desc_m_3";
+            this.desc_m_3.Size = new System.Drawing.Size(44, 22);
+            this.desc_m_3.TabIndex = 12;
+            this.desc_m_3.Text = "Tipo: ";
+            this.desc_m_3.UseCompatibleTextRendering = true;
             // 
             // searchtype
             // 
@@ -188,50 +188,51 @@
             this.searchtype.Text = "-";
             this.searchtype.UseCompatibleTextRendering = true;
             // 
-            // label2
+            // desc_m_2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 59);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 22);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "Anno: ";
-            this.label2.UseCompatibleTextRendering = true;
+            this.desc_m_2.AutoSize = true;
+            this.desc_m_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_m_2.Location = new System.Drawing.Point(3, 59);
+            this.desc_m_2.Name = "desc_m_2";
+            this.desc_m_2.Size = new System.Drawing.Size(50, 22);
+            this.desc_m_2.TabIndex = 10;
+            this.desc_m_2.Text = "Anno: ";
+            this.desc_m_2.UseCompatibleTextRendering = true;
             // 
-            // label5
+            // desc_m_1
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(3, 5);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 22);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Titolo: ";
-            this.label5.UseCompatibleTextRendering = true;
+            this.desc_m_1.AutoSize = true;
+            this.desc_m_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_m_1.Location = new System.Drawing.Point(3, 5);
+            this.desc_m_1.Name = "desc_m_1";
+            this.desc_m_1.Size = new System.Drawing.Size(52, 22);
+            this.desc_m_1.TabIndex = 11;
+            this.desc_m_1.Text = "Titolo: ";
+            this.desc_m_1.UseCompatibleTextRendering = true;
             // 
             // main
             // 
             this.main.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.main.Controls.Add(this.label5);
-            this.main.Controls.Add(this.label2);
+            this.main.Controls.Add(this.desc_m_1);
+            this.main.Controls.Add(this.desc_m_2);
             this.main.Controls.Add(this.searchtype);
-            this.main.Controls.Add(this.label6);
+            this.main.Controls.Add(this.desc_m_3);
             this.main.Controls.Add(this.searchyear);
             this.main.Controls.Add(this.searchtitle);
             this.main.Location = new System.Drawing.Point(592, 66);
             this.main.Name = "main";
-            this.main.Size = new System.Drawing.Size(298, 280);
+            this.main.Size = new System.Drawing.Size(298, 294);
             this.main.TabIndex = 17;
             // 
             // rated
             // 
-            this.rated.AutoSize = true;
+            this.rated.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rated.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rated.Location = new System.Drawing.Point(122, 80);
             this.rated.Name = "rated";
-            this.rated.Size = new System.Drawing.Size(13, 18);
+            this.rated.Size = new System.Drawing.Size(173, 18);
             this.rated.TabIndex = 7;
             this.rated.Text = "-";
             // 
@@ -247,12 +248,12 @@
             // 
             // title
             // 
-            this.title.AutoSize = true;
+            this.title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.title.Location = new System.Drawing.Point(59, 5);
-            this.title.MaximumSize = new System.Drawing.Size(160, 90);
             this.title.Name = "title";
-            this.title.Size = new System.Drawing.Size(13, 18);
+            this.title.Size = new System.Drawing.Size(236, 54);
             this.title.TabIndex = 3;
             this.title.Text = "-";
             // 
@@ -308,7 +309,7 @@
             this.detail.Controls.Add(this.rated);
             this.detail.Location = new System.Drawing.Point(592, 66);
             this.detail.Name = "detail";
-            this.detail.Size = new System.Drawing.Size(295, 280);
+            this.detail.Size = new System.Drawing.Size(298, 294);
             this.detail.TabIndex = 25;
             this.detail.Visible = false;
             // 
@@ -325,11 +326,12 @@
             // 
             // genre
             // 
-            this.genre.AutoSize = true;
+            this.genre.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.genre.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.genre.Location = new System.Drawing.Point(78, 147);
             this.genre.Name = "genre";
-            this.genre.Size = new System.Drawing.Size(13, 18);
+            this.genre.Size = new System.Drawing.Size(217, 18);
             this.genre.TabIndex = 39;
             this.genre.Text = "-";
             // 
@@ -346,11 +348,12 @@
             // 
             // runtime
             // 
-            this.runtime.AutoSize = true;
+            this.runtime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.runtime.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.runtime.Location = new System.Drawing.Point(78, 125);
             this.runtime.Name = "runtime";
-            this.runtime.Size = new System.Drawing.Size(13, 18);
+            this.runtime.Size = new System.Drawing.Size(217, 18);
             this.runtime.TabIndex = 35;
             this.runtime.Text = "-";
             // 
@@ -367,11 +370,12 @@
             // 
             // released
             // 
-            this.released.AutoSize = true;
+            this.released.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.released.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.released.Location = new System.Drawing.Point(78, 103);
             this.released.Name = "released";
-            this.released.Size = new System.Drawing.Size(13, 18);
+            this.released.Size = new System.Drawing.Size(217, 18);
             this.released.TabIndex = 29;
             this.released.Text = "-";
             // 
@@ -559,9 +563,9 @@
             this.pictureBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox4.BackColor = System.Drawing.Color.Black;
-            this.pictureBox4.Location = new System.Drawing.Point(0, 1);
+            this.pictureBox4.Location = new System.Drawing.Point(0, 0);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(890, 52);
+            this.pictureBox4.Size = new System.Drawing.Size(890, 53);
             this.pictureBox4.TabIndex = 22;
             this.pictureBox4.TabStop = false;
             // 
@@ -584,6 +588,7 @@
             this.MinimumSize = new System.Drawing.Size(762, 328);
             this.Name = "Omdb_main";
             this.Text = "Form1";
+            this.Resize += new System.EventHandler(this.Omdb_main_Resize);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
@@ -616,10 +621,10 @@
         private System.Windows.Forms.PictureBox poster;
         private System.Windows.Forms.Label searchtitle;
         private System.Windows.Forms.Label searchyear;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label desc_m_3;
         private System.Windows.Forms.Label searchtype;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label desc_m_2;
+        private System.Windows.Forms.Label desc_m_1;
         private System.Windows.Forms.Panel main;
         private System.Windows.Forms.Label rated;
         private System.Windows.Forms.Label year;

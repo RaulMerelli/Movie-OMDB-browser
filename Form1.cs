@@ -16,6 +16,9 @@ namespace Movie_omdb
         int Nselected = 1;
         int pNselected = 1;
         Button[] buttons;
+        Control[] BoldControls;
+        Control[] LiteControls;
+        Control[] RegularControls;
         string CurrentSearchString;
 
         [DllImport("gdi32.dll")]
@@ -27,41 +30,34 @@ namespace Movie_omdb
         FontFamily AmazonEmber_Rg;
         FontFamily AmazonEmber_Lt;
         FontFamily AmazonEmber_Bd;
-        List<string[]> styles;
 
         public Omdb_main()
         {
             InitializeComponent();
             buttons = new Button[5] { b_1, b_2, b_3, b_4, b_5 };
+            BoldControls = new Control[9] { desc_m_1, desc_m_2, desc_m_3, desc_1, desc_2, desc_3, desc_4, desc_5, desc_6 };
+            LiteControls = new Control[11] { search, ricerca, title, year, rated, released, runtime, genre, searchtitle, searchyear, searchtype};
+            RegularControls = new Control[7] { generic, details, b_1, b_2, b_3, b_4, b_5 };
+
             CheckForIllegalCrossThreadCalls = false;
             AmazonEmber_Rg = InitCustomFont(Properties.Resources.AmazonEmber_Rg);
             AmazonEmber_Lt = InitCustomFont(Properties.Resources.AmazonEmber_Lt);
             AmazonEmber_Bd = InitCustomFont(Properties.Resources.AmazonEmber_Bd);
             UpdateColor();
 
-            label5.Font = new Font(AmazonEmber_Bd, label5.Font.Size);
-            label6.Font = new Font(AmazonEmber_Bd, label6.Font.Size);
-            desc_1.Font = new Font(AmazonEmber_Bd, desc_1.Font.Size);
-            desc_2.Font = new Font(AmazonEmber_Bd, desc_2.Font.Size);
-            desc_3.Font = new Font(AmazonEmber_Bd, desc_3.Font.Size);
-            desc_4.Font = new Font(AmazonEmber_Bd, desc_4.Font.Size);
-            desc_5.Font = new Font(AmazonEmber_Bd, desc_5.Font.Size);
-            desc_6.Font = new Font(AmazonEmber_Bd, desc_6.Font.Size);
-            label2.Font = new Font(AmazonEmber_Bd, label2.Font.Size);
-            generic.Font = new Font(AmazonEmber_Bd, generic.Font.Size, FontStyle.Underline);
-            details.Font = new Font(AmazonEmber_Bd, details.Font.Size);
-            search.Font = new Font(AmazonEmber_Lt, search.Font.Size);
-            ricerca.Font = new Font(AmazonEmber_Lt, ricerca.Font.Size);
-            title.Font = new Font(AmazonEmber_Lt, title.Font.Size);
-            year.Font = new Font(AmazonEmber_Lt, year.Font.Size);
-            rated.Font = new Font(AmazonEmber_Lt, rated.Font.Size);
-            released.Font = new Font(AmazonEmber_Lt, released.Font.Size);
-            runtime.Font = new Font(AmazonEmber_Lt, runtime.Font.Size);
-            genre.Font = new Font(AmazonEmber_Lt, genre.Font.Size);
-            searchtitle.Font = new Font(AmazonEmber_Lt, searchtitle.Font.Size);
-            searchyear.Font = new Font(AmazonEmber_Lt, searchyear.Font.Size);
-            searchtype.Font = new Font(AmazonEmber_Lt, searchtype.Font.Size);
-
+            foreach (var control in BoldControls)
+            {
+                control.Font = new Font(AmazonEmber_Bd, control.Font.Size);
+            }
+            foreach (var control in LiteControls)
+            {
+                control.Font = new Font(AmazonEmber_Lt, control.Font.Size);
+            }
+            foreach (var control in RegularControls)
+            {
+                control.Font = new Font(AmazonEmber_Rg, control.Font.Size);
+            }
+            label_MouseLeave(generic, new EventArgs());
             Nav_Buttons();
         }
 
@@ -104,31 +100,39 @@ namespace Movie_omdb
             pictureBox2.BackgroundImage = bitmap2;
         }
 
+        void colorError(string hex)
+        {
+            MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         //permette di cambiare i colori in runtime. E' sufficiente scrivere ad esempio color=Pink o color=#AA4521
         void UpdateColor(string Command)
         {
-            if (Command.ToLower().Contains("color="))
+            Command = Command.ToLower();
+            if (Command.Contains("color="))
             {
-                if (Command.ToLower() == "color=default")
+                if (Command.Contains("=default"))
                 {
-                    Properties.Settings.Default.customColor = Color.DarkOrange;
-                    search.BackColor = Properties.Settings.Default.customColor;
-                    Properties.Settings.Default.foreColor = Color.Black;
-                    search.Image = Properties.Resources.search_icon;
+                    switch(Command.Replace("=default",""))
+                    {
+                        case "color":
+                            Properties.Settings.Default.customColor = Color.DarkOrange;
+                            search.BackColor = Properties.Settings.Default.customColor;
+                            Properties.Settings.Default.foreColor = Color.Black;
+                            search.Image = Properties.Resources.search_icon;
+                            break;
+                        case "barcolor":
+                            Properties.Settings.Default.barColor = Color.DimGray;
+                            break;
+                        case "backcolor":
+                            Properties.Settings.Default.backColor = Color.DarkGray;
+                            break;
+                        case "listcolor":
+                            Properties.Settings.Default.listColor = Color.Silver;
+                            break;
+                    }
                 }
-                else if (Command.ToLower() == "barcolor=default")
-                {
-                    Properties.Settings.Default.barColor = Color.DimGray;
-                }
-                else if (Command.ToLower() == "backcolor=default")
-                {
-                    Properties.Settings.Default.backColor = Color.DarkGray;
-                }
-                else if (Command.ToLower() == "listcolor=default")
-                {
-                    Properties.Settings.Default.listColor = Color.Silver;
-                }
-                else if (Command.ToLower().Substring(0, 4) == "back")
+                else if (Command.Substring(0, 4) == "back")
                 {
                     string hex = Command.Remove(0, 10);
                     try
@@ -137,7 +141,7 @@ namespace Movie_omdb
                     }
                     catch
                     {
-                        MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        colorError(hex);
                         return;
                     }
                     if (Properties.Settings.Default.backColor.A < 255)
@@ -145,7 +149,7 @@ namespace Movie_omdb
                         Properties.Settings.Default.backColor = Color.FromArgb(255, Properties.Settings.Default.backColor);
                     }
                 }
-                else if (Command.ToLower().Substring(0, 4) == "list")
+                else if (Command.Substring(0, 4) == "list")
                 {
                     string hex = Command.Remove(0, 10);
                     try
@@ -154,7 +158,7 @@ namespace Movie_omdb
                     }
                     catch
                     {
-                        MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        colorError(hex);
                         return;
                     }
                     if (Properties.Settings.Default.backColor.A < 255)
@@ -162,7 +166,7 @@ namespace Movie_omdb
                         Properties.Settings.Default.listColor = Color.FromArgb(255, Properties.Settings.Default.backColor);
                     }
                 }
-                else if (Command.ToLower().Substring(0, 3) != "bar")
+                else if (Command.Substring(0, 3) != "bar")
                 {
                     string hex = Command.Remove(0, 6);
                     try
@@ -171,7 +175,7 @@ namespace Movie_omdb
                     }
                     catch
                     {
-                        MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        colorError(hex);
                         return;
                     }
                     if (Properties.Settings.Default.customColor.A < 255)
@@ -189,7 +193,7 @@ namespace Movie_omdb
                     }
                     catch
                     {
-                        MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        colorError(hex);
                         return;
                     }
                     if (Properties.Settings.Default.barColor.A < 255)
@@ -198,17 +202,17 @@ namespace Movie_omdb
                     }
                 }
             }
-            else if (Command.ToLower().Contains("style="))
+            else if (Command.Contains("style="))
             {
-                if (Command.ToLower().Contains("savestyle="))
+                if (Command.Contains("savestyle="))
                 {
-                    Properties.Settings.Default.styles += "-" + Command.Remove(0, 10) + ";" + ColorTranslator.ToHtml(Properties.Settings.Default.customColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.foreColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.barColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.backColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.listColor);
-                    MessageBox.Show("Stile salvato come '" + Command.Remove(0, 10) + "'.");
+                    Properties.Settings.Default.styles += "-" + Command.Remove(0, 10).ToLower() + ";" + ColorTranslator.ToHtml(Properties.Settings.Default.customColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.foreColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.barColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.backColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.listColor);
+                    MessageBox.Show("Stile salvato come '" + Command.Remove(0, 10).ToLower() + "'.");
                 }
-                else if (Command.ToLower().Contains("deletestyle="))
+                else if (Command.Contains("deletestyle="))
                 {
                     string temp = "";
-                    string todelete = Command.Remove(0, 12);
+                    string todelete = Command.Remove(0, 12).ToLower();
 
                     string[] lines = Properties.Settings.Default.styles.Split('-');
                     for (int i = 0; i < lines.Length; i++)
@@ -223,11 +227,10 @@ namespace Movie_omdb
                     temp.Remove(0, 1);
                     Properties.Settings.Default.styles = temp; 
                     MessageBox.Show("Stile eliminato: '" + todelete + "'.");
-
                 }
                 else
                 {
-                    string style = Command.Remove(0, 6);
+                    string style = Command.Remove(0, 6).ToLower();
                     string[] lines = Properties.Settings.Default.styles.Split('-');
                     for (int i = 0; i < lines.Length; i++)
                     {
@@ -358,12 +361,34 @@ namespace Movie_omdb
             return pfc.Families[0];
         }
 
+        void CommandProcessor(string command)
+        {
+            if(command.ToLower().Contains("color=") || command.ToLower().Contains("style="))
+            {
+                UpdateColor(command);
+            }
+            else if (command.ToLower().Contains("fullscreen="))
+            {
+                command = command.Remove(0, 11);
+                if (command=="1" || command=="true")
+                {
+                    FormBorderStyle = FormBorderStyle.None;
+                    WindowState = FormWindowState.Maximized;
+                }
+                else if (command == "0" || command == "false")
+                {
+                    FormBorderStyle = FormBorderStyle.Sizable;
+                    WindowState = FormWindowState.Normal;
+                }
+            }
+        }
+
         //Evento scatenato dal click del pulsante cerca o dal tasto invio all'interno della textbox di ricerca
         private async void search_Click(object sender, EventArgs e)
         {
-            if(ricerca.Text.ToLower().Contains("color=") || ricerca.Text.ToLower().Contains("style="))
+            if(ricerca.Text.Contains("="))
             {
-                UpdateColor(ricerca.Text);
+                CommandProcessor(ricerca.Text);
             }
             else
             {
@@ -436,7 +461,6 @@ namespace Movie_omdb
                     searchyear.Text = searchResult.Search[i].Year;
                     searchtype.Text = searchResult.Search[i].Type;
                 }
-
             }
         }
 
@@ -455,7 +479,7 @@ namespace Movie_omdb
             int ItemMargin = 5;
             //Ottieni la lista di elementi a partire dalla listbox
             var lst = (sender as ListBox).Items;
-            Color localForeColor = Color.Black;
+            Color localForeColor;
             if (lst.Count > 0 && (sender as ListBox).SelectedIndex != -1)
             {
                 Search currentList = (Search)lst[e.Index];
@@ -603,7 +627,6 @@ namespace Movie_omdb
             for (int i = from; i < from + lenght; i++)
             {
                 buttons[i].Text = (i == from) ? "<" : (i == from + lenght - 1) ? ">" : (i - from).ToString();
-                buttons[i].Font = new Font(AmazonEmber_Bd, buttons[i].Font.Size);
             }
         }
 
@@ -742,6 +765,11 @@ namespace Movie_omdb
                     UpdateSearchList();
                 }
             }
+        }
+
+        private void Omdb_main_Resize(object sender, EventArgs e)
+        {
+            poster_Resize(sender, e);
         }
     }
 }
