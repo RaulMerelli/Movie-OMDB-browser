@@ -27,6 +27,11 @@ Software made in the italian language. You are free to edit it for your own purp
 #### ApiKey is not provided. You need to ask your own from here:
 https://www.omdbapi.com/apikey.aspx
 
+## Fullscreen
+
+You can easily put the program in fullscreen just doing fullscreen=true.
+
+You can also come back to window doing fullscreen=false.
 
 ## Style manager
 
@@ -92,3 +97,9 @@ There are some styles already included:
 -style1
 
 -rai
+
+-mediaset
+
+-style2
+
+-telegram
