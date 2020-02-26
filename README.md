@@ -27,6 +27,15 @@ Software made in the italian language. You are free to edit it for your own purp
 #### ApiKey is not provided. You need to ask your own from here:
 https://www.omdbapi.com/apikey.aspx
 
+## Pages
+
+Easily navigate through pages via the virtual buttons or via physical right and left arrow keys on your keyboard.
+
+To go to the first page just keep pressed for 450ms the left arrow button (or key).
+
+To go to the last page just keep pressed for 450ms the right arrow button (or key).
+
+
 ## Fullscreen
 
 You can easily put the program in fullscreen just doing fullscreen=true.
@@ -103,3 +112,9 @@ There are some styles already included:
 -style2
 
 -telegram
+
+-steam
+
+-whatsapp
+
+-facebook
