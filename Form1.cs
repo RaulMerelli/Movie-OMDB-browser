@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
@@ -15,59 +16,85 @@ namespace Movie_omdb
     {
         int Nselected = 1;
         int pNselected = 1;
+        int Build = 10240; //Versione soglia build Windows. In questo caso la prima RTM W10
         Button[] buttons;
         Control[] BoldControls;
         Control[] LiteControls;
         Control[] RegularControls;
         string CurrentSearchString;
+        Stopwatch timer = new Stopwatch();
 
-        [DllImport("gdi32.dll")]
-        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
+        #if !__MonoCS__
+        [DllImport("gdi32.dll")] //questa Dll contiene le basi della grafica di Windows, tra cui l'allocamento in memoria dei font che serve a me. Non esiste in ambienti diversi da API Win32
+        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts); 
+        #endif
 
-        static string KEY = "&apikey=InsertYourApiKeyHere";
-        HttpClient client = new HttpClient();
+        static string KEY = "&apikey=InsertYourApiKeyHere"; //La mia key. 
+        HttpClient client; 
         SearchResult searchResult;
-        FontFamily AmazonEmber_Rg;
-        FontFamily AmazonEmber_Lt;
-        FontFamily AmazonEmber_Bd;
+        FontFamily AmazonEmber_Rg; //<--La diachiaarazione dei tre font
+        FontFamily AmazonEmber_Lt; //<---' |
+        FontFamily AmazonEmber_Bd; //<-----'
 
         public Omdb_main()
         {
             InitializeComponent();
             buttons = new Button[5] { b_1, b_2, b_3, b_4, b_5 };
-            BoldControls = new Control[9] { desc_m_1, desc_m_2, desc_m_3, desc_1, desc_2, desc_3, desc_4, desc_5, desc_6 };
-            LiteControls = new Control[11] { search, ricerca, title, year, rated, released, runtime, genre, searchtitle, searchyear, searchtype};
+            BoldControls = new Control[21] { desc_m_1, desc_m_2, desc_m_3, desc_1, desc_2, desc_3, desc_4, desc_5, desc_6, desc_7, desc_8, desc_9, desc_10, desc_11, desc_12, desc_13, desc_14, desc_15, desc_16, desc_17, desc_18 };
+            LiteControls = new Control[23] { search, ricerca, title, year, rated, released, runtime, genre, searchtitle, searchyear, searchtype, director, writer, type, boxoffice, country, language, awards, dvd, production, metascore, actors, plot };
             RegularControls = new Control[7] { generic, details, b_1, b_2, b_3, b_4, b_5 };
 
             CheckForIllegalCrossThreadCalls = false;
-            AmazonEmber_Rg = InitCustomFont(Properties.Resources.AmazonEmber_Rg);
-            AmazonEmber_Lt = InitCustomFont(Properties.Resources.AmazonEmber_Lt);
-            AmazonEmber_Bd = InitCustomFont(Properties.Resources.AmazonEmber_Bd);
+            poster_Resize(new object(), new EventArgs());
             UpdateColor();
 
-            foreach (var control in BoldControls)
+            #if !__MonoCS__
+            if (Environment.OSVersion.Version.Build > Build) //Su Win7 si sono verificati problemi con i custom font. Per evitare crash sulla piattaforma in questione, disabilito previo controllo
             {
-                control.Font = new Font(AmazonEmber_Bd, control.Font.Size);
+                AmazonEmber_Rg = InitCustomFont(Properties.Resources.AmazonEmber_Rg); //<--Inizializzo i tre font
+                AmazonEmber_Lt = InitCustomFont(Properties.Resources.AmazonEmber_Lt); //<---' |
+                AmazonEmber_Bd = InitCustomFont(Properties.Resources.AmazonEmber_Bd); //<-----'
+
+                foreach (var control in BoldControls) //Applico il font bold sui controlli segnalati come tali
+                {
+                    control.Font = new Font(AmazonEmber_Bd, control.Font.Size);
+                }
+                foreach (var control in LiteControls) //Applico il font lite sui controlli segnalati come tali
+                {
+                    control.Font = new Font(AmazonEmber_Lt, control.Font.Size);
+                }
+                foreach (var control in RegularControls) //Applico il font regolari sui controlli segnalati come tali
+                {
+                    control.Font = new Font(AmazonEmber_Rg, control.Font.Size);
+                }
             }
-            foreach (var control in LiteControls)
+            else //workaround con font Predifiniti sans serif per tutte le macchine con OS diverso da Windows con build maggiore di quella definita
+            #endif
             {
-                control.Font = new Font(AmazonEmber_Lt, control.Font.Size);
-            }
-            foreach (var control in RegularControls)
-            {
-                control.Font = new Font(AmazonEmber_Rg, control.Font.Size);
+                foreach (var control in BoldControls)
+                {
+                    control.Font = new Font(FontFamily.GenericSansSerif, control.Font.Size, FontStyle.Bold);
+                }
+                foreach (var control in LiteControls) //Non avendo font lite by fontstyle, li tratto come regualar
+                {
+                    control.Font = new Font(FontFamily.GenericSansSerif, control.Font.Size);
+                }
+                foreach (var control in RegularControls)
+                {
+                    control.Font = new Font(FontFamily.GenericSansSerif, control.Font.Size);
+                }
             }
             label_MouseLeave(generic, new EventArgs());
             Nav_Buttons();
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override void OnClosed(EventArgs e) //ammesso che la chiusura non sia forzata o di un crash, all'uscita salvo le impostazioni e memorizzo colori e stili.
         {
             Properties.Settings.Default.Save();
             base.OnClosed(e);
         }
 
-        void UpdateBarColor()
+        void UpdateBarColor() //rende effettivo il colore scelto per il bar color
         {
             Bitmap bitmap = Properties.Resources.search_left;
             Bitmap bitmap2 = Properties.Resources.search_right;
@@ -81,7 +108,7 @@ namespace Movie_omdb
             pictureBox3.BackColor = Properties.Settings.Default.barColor;
         }
 
-        void UpdateBackColor()
+        void UpdateBackColor() //rende effettivo il colore scelto per il back color
         {
             Color color = WhiteOrBlack(Properties.Settings.Default.backColor);
             poster.BackColor = Properties.Settings.Default.backColor;
@@ -100,7 +127,7 @@ namespace Movie_omdb
             pictureBox2.BackgroundImage = bitmap2;
         }
 
-        void colorError(string hex)
+        void colorError(string hex) //semplice msgbox di errore, funzionalizzata per ripetitività
         {
             MessageBox.Show("Colore o HEX non valido: " + hex, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
@@ -132,7 +159,7 @@ namespace Movie_omdb
                             break;
                     }
                 }
-                else if (Command.Substring(0, 4) == "back")
+                else if (Command.Substring(0, 4) == "back") //backcolor
                 {
                     string hex = Command.Remove(0, 10);
                     try
@@ -149,7 +176,7 @@ namespace Movie_omdb
                         Properties.Settings.Default.backColor = Color.FromArgb(255, Properties.Settings.Default.backColor);
                     }
                 }
-                else if (Command.Substring(0, 4) == "list")
+                else if (Command.Substring(0, 4) == "list") //listcolor
                 {
                     string hex = Command.Remove(0, 10);
                     try
@@ -166,7 +193,7 @@ namespace Movie_omdb
                         Properties.Settings.Default.listColor = Color.FromArgb(255, Properties.Settings.Default.backColor);
                     }
                 }
-                else if (Command.Substring(0, 3) != "bar")
+                else if (Command.Substring(0, 3) != "bar") //color
                 {
                     string hex = Command.Remove(0, 6);
                     try
@@ -184,7 +211,7 @@ namespace Movie_omdb
                     }
                     Properties.Settings.Default.foreColor = WhiteOrBlack(Properties.Settings.Default.customColor);
                 }
-                else
+                else //barcolor
                 {
                     string hex = Command.Remove(0, 9);
                     try
@@ -202,14 +229,14 @@ namespace Movie_omdb
                     }
                 }
             }
-            else if (Command.Contains("style="))
+            else if (Command.Contains("style=")) //stili
             {
-                if (Command.Contains("savestyle="))
+                if (Command.Contains("savestyle=")) //salva gli stili con la conf di colori corrente
                 {
                     Properties.Settings.Default.styles += "-" + Command.Remove(0, 10).ToLower() + ";" + ColorTranslator.ToHtml(Properties.Settings.Default.customColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.foreColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.barColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.backColor) + "," + ColorTranslator.ToHtml(Properties.Settings.Default.listColor);
                     MessageBox.Show("Stile salvato come '" + Command.Remove(0, 10).ToLower() + "'.");
                 }
-                else if (Command.Contains("deletestyle="))
+                else if (Command.Contains("deletestyle=")) //elimina uno stile con il nome specificato e ricrea la "lista" stili
                 {
                     string temp = "";
                     string todelete = Command.Remove(0, 12).ToLower();
@@ -228,7 +255,7 @@ namespace Movie_omdb
                     Properties.Settings.Default.styles = temp; 
                     MessageBox.Show("Stile eliminato: '" + todelete + "'.");
                 }
-                else
+                else //applica uno stile
                 {
                     string style = Command.Remove(0, 6).ToLower();
                     string[] lines = Properties.Settings.Default.styles.Split('-');
@@ -243,10 +270,10 @@ namespace Movie_omdb
                     }
                 }
             }
-            UpdateColor();
+            UpdateColor(); //rende effettivi i colori scelti
         }
 
-        void ChangeStyle(string colors)
+        void ChangeStyle(string colors) //parte dell'interprete degli stili
         {
             string[] colorList = colors.Split(',');
             Properties.Settings.Default.customColor = ColorTranslator.FromHtml(colorList[0]);
@@ -256,17 +283,17 @@ namespace Movie_omdb
             Properties.Settings.Default.listColor = ColorTranslator.FromHtml(colorList[4]);
         }
 
-        void UpdateColor()
+        void UpdateColor() //rende effettivi i colori scelti applicandoli
         {
-            if (Properties.Settings.Default.foreColor == Color.Black)
+            if (Properties.Settings.Default.foreColor == Color.Black) // il colore che risalta meglio sul barcolor è nero in questo caso
             {
-                search.Image = Properties.Resources.search_icon;
+                search.Image = Properties.Resources.search_icon; //l'immagine della lente è già nera. caricala così
             }
-            else
+            else //in questo caso il colore che risalta meglio sul barcolor è bianco 
             {
-                Bitmap bitmap = new Bitmap(Properties.Resources.search_icon);
-                Invert(bitmap);
-                search.Image = bitmap;
+                Bitmap bitmap = new Bitmap(Properties.Resources.search_icon); //l'immagine della lente decve diventare bianca. Carico in obj bitmap
+                Invert(bitmap); //Inverto i colori della bitmap
+                search.Image = bitmap; //carico la bitmap invertita
             }
             search.BackColor = Properties.Settings.Default.customColor;
             UpdateBackColor();
@@ -278,30 +305,35 @@ namespace Movie_omdb
             searchlist.Focus();
         }
 
+        //Le bitmap che ho creato sono modulari con canale alpha. Tendenzialmente sono fatte perchè la parte disegnata in nero possa essere sostituita con qualsiasi colore.
+        //La funzione qua che ho creato è più generica e accetta anche altri colori come oldcolor oltre al nero, ma non si sa mai che potrebbe servire in futuro, per cui lo lascio più modulare
         void ChangeColor(Bitmap bitmapImage, Color oldColor, Color newColor)
         {
             var bitmapRead = bitmapImage.LockBits(new Rectangle(0, 0, bitmapImage.Width, bitmapImage.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);
             var bitmapLength = bitmapRead.Stride * bitmapRead.Height;
-            var bitmapBGRA = new byte[bitmapLength];
-            Marshal.Copy(bitmapRead.Scan0, bitmapBGRA, 0, bitmapLength);
+            var BGRA = new byte[bitmapLength];
+            Marshal.Copy(bitmapRead.Scan0, BGRA, 0, bitmapLength);
             bitmapImage.UnlockBits(bitmapRead);
 
             for (int i = 0; i < bitmapLength; i += 4)
             {
-                Color color = Color.FromArgb(bitmapBGRA[i + 2], bitmapBGRA[i + 1], bitmapBGRA[i]);
-                if (color.ToArgb() == oldColor.ToArgb())
+                if (BGRA[i + 2] == oldColor.R && BGRA[i + 1] == oldColor.G && BGRA[i] == oldColor.B)
                 {
-                    bitmapBGRA[i] = newColor.B;
-                    bitmapBGRA[i + 1] = newColor.G;
-                    bitmapBGRA[i + 2] = newColor.R;
+                    BGRA[i] = newColor.B;
+                    BGRA[i + 1] = newColor.G;
+                    BGRA[i + 2] = newColor.R;
                 }
             }
 
             var bitmapWrite = bitmapImage.LockBits(new Rectangle(0, 0, bitmapImage.Width, bitmapImage.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-            Marshal.Copy(bitmapBGRA, 0, bitmapWrite.Scan0, bitmapLength);
+            Marshal.Copy(BGRA, 0, bitmapWrite.Scan0, bitmapLength);
             bitmapImage.UnlockBits(bitmapWrite);
         }
 
+        //molte immagini sono monocromatiche con canale alpha: questo permette loro che se sono nere possono anche diventare bianche senza magheggi troppo compplicati e soprattutto senza tenere un'altra copia dell'immagine del colore opposto intagrata nel progetto.
+        //questo mi consente di tenere molte meno immagini (in questo caso ben 5 in meno) integrate nel progetto. Il dover invertire consuma però tempo di CPU, quindi questa funzione usa UnlockBits e non GetPixel e SetPixel, che blocca e sblocca per ogni singolo pixel.
+        //diventa quindi innegabile che così è più comodo, in quanto serve un processore davvero stupido per invertire i colori e si spreca meno RAM e memoria occupata per gli eseguibili.
+        //Se il mio obiettivo fosse di rendere il programma ancora più leggero spazio parlando, farei un giro di OptiPNG su ogni PNG e poi una compressione con UPX, ma è superfluo, il vero motivo per cui uso UnlockBits invece di Get e Set Pixel è che li odio.
         public static void Invert(Bitmap bitmapImage)
         {
             var bitmapRead = bitmapImage.LockBits(new Rectangle(0, 0, bitmapImage.Width, bitmapImage.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);
@@ -323,6 +355,7 @@ namespace Movie_omdb
             bitmapImage.UnlockBits(bitmapWrite);
         }
 
+        //determina sul colore passato se risalta meglio il bianco o il nero
         Color WhiteOrBlack(Color c)
         {
             return (int)Math.Sqrt(c.R * c.R * .299 + c.G * c.G * .587 + c.B * c.B * .114) > 130 ? Color.Black : Color.White;
@@ -346,21 +379,24 @@ namespace Movie_omdb
             searchlist.Focus();
         }
 
-        //Inizializza un nuovo font richiamabile da codice senza installarlo nel sistema a partire da un file ttf presente nelle risorse del progetto
+        #if !__MonoCS__
+        //Inizializza un nuovo font richiamabile da codice senza installarlo nel sistema a partire da un file ttf presente nelle risorse del progetto.
+        //Non applicabile (almeno non con la Dll che ho importato, penso ci sia un suo Shared Object equivalente) su Linux/Mac.
         FontFamily InitCustomFont(byte[] font)
         {
             PrivateFontCollection pfc = new PrivateFontCollection();
             int fontLength = font.Length;
-            byte[] fontdata = font;
             IntPtr data = Marshal.AllocCoTaskMem(fontLength);
-            Marshal.Copy(fontdata, 0, data, fontLength);
+            Marshal.Copy(font, 0, data, fontLength);
             uint cFonts = 0;
-            AddFontMemResourceEx(data, (uint)fontdata.Length, IntPtr.Zero, ref cFonts);
+            AddFontMemResourceEx(data, (uint)font.Length, IntPtr.Zero, ref cFonts);
             pfc.AddMemoryFont(data, fontLength);
             //Marshal.FreeCoTaskMem(data);
             return pfc.Families[0];
         }
+        #endif
 
+        //se nella ricerca c'è un uguale arriviamo qui: gestiamo colore, stile e schermo intero.
         void CommandProcessor(string command)
         {
             if(command.ToLower().Contains("color=") || command.ToLower().Contains("style="))
@@ -417,28 +453,21 @@ namespace Movie_omdb
             {
                 CurrentSearchString = CurrentSearchString.Substring(0, CurrentSearchString.Length - 1);
             }
+            CurrentSearchString = System.Text.RegularExpressions.Regex.Replace(CurrentSearchString, @"\++", "+");
         }
         
         //Ottiene a partire da un url contenente il relativo JSON un oggetto di tipo Movie
         async Task<Movie> GetMovieAsync(string path)
         {
             HttpResponseMessage response = await client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadAsAsync<Movie>();
-            }
-            return null;
+            return response.IsSuccessStatusCode ? await response.Content.ReadAsAsync<Movie>() : null;
         }
 
         //Ottiene a partire da un url contenente il relativo JSON un oggetto di tipo SearchResult
         async Task<SearchResult> GetSearchResultAsync(string path)
         {
             HttpResponseMessage response = await client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadAsAsync<SearchResult>();
-            }
-            return null;
+            return response.IsSuccessStatusCode ? await response.Content.ReadAsAsync<SearchResult>() : null;
         }
 
         private void searchlist_SelectedIndexChanged(object sender, EventArgs e)
@@ -464,13 +493,14 @@ namespace Movie_omdb
             }
         }
 
+        //L'immagine si adatta alle dimensioni della finestra e smette di ingrandire quando sgranerebbe.
         private void poster_Resize(object sender, EventArgs e)
         {
             int h = poster.Size.Height;
             int x = poster.Location.X;
             double rapporto = h / 380.0;
             poster.Size = new Size((int)(300 * rapporto), h);
-            main.Location = new Point(x + (int)(300 * rapporto), main.Location.Y);
+            main.Location = new Point(x + (int)(300 * rapporto), main.Location.Y); //le dimensioni di questo panel e del successiovo sono gestite a mano e non da un anchor per motivi di risultati sgraditi nei cambiamenti di stato
             detail.Location = main.Location;
         }
 
@@ -528,10 +558,11 @@ namespace Movie_omdb
                 Rectangle layout_rect = new Rectangle(65, e.Bounds.Top + ItemMargin, 262, 19);
 
                 //Disegna il testo.
-                e.Graphics.DrawString(currentList.Title, new Font(AmazonEmber_Lt, 11), new SolidBrush(localForeColor), layout_rect);
+                e.Graphics.DrawString(currentList.Title, new Font((Environment.OSVersion.Version.Build > Build) ? AmazonEmber_Lt : FontFamily.GenericSansSerif, 11), new SolidBrush(localForeColor), layout_rect);
             }
         }
 
+        //Hover entrata su label. Sgrigisce e sottolinea
         private void label_MouseEnter(object sender, EventArgs e)
         {
             Label label = sender as Label;
@@ -539,6 +570,7 @@ namespace Movie_omdb
             label.Font = new Font(label.Font, FontStyle.Underline);
         }
 
+        //Hover uscita su label. sbianca e desottolinea
         private void label_MouseLeave(object sender, EventArgs e)
         {
             Label label = sender as Label;
@@ -555,6 +587,7 @@ namespace Movie_omdb
             }
         }
 
+        //click sulla panoramica
         private void generic_click(object sender, EventArgs e)
         {
             if (generic.Text[generic.Text.Length - 1] != '&')
@@ -568,6 +601,7 @@ namespace Movie_omdb
             }
         }
 
+        //click sui dettagli
         private async void details_Click(object sender, EventArgs e)
         {
             if (details.Text[details.Text.Length - 1] != '&')
@@ -576,7 +610,6 @@ namespace Movie_omdb
                 generic.Text = generic.Text.Substring(0, generic.Text.Length - 1);
                 generic.Font = new Font(generic.Font, FontStyle.Regular);
                 details.Font = new Font(details.Font, FontStyle.Underline);
-
                 ClientReset();
 
                 try
@@ -589,6 +622,18 @@ namespace Movie_omdb
                     released.Text = movie.Released;
                     runtime.Text = movie.Runtime;
                     genre.Text = movie.Genre;
+                    director.Text = movie.Director;
+                    writer.Text = movie.Writer;
+                    boxoffice.Text = movie.BoxOffice;
+                    type.Text = movie.Type;
+                    language.Text = movie.Language;
+                    country.Text = movie.Country;
+                    production.Text = movie.Production;
+                    dvd.Text = movie.DVD;
+                    metascore.Text = movie.Metascore;
+                    awards.Text = movie.Awards;
+                    actors.Text = movie.Actors;
+                    plot.Text = movie.Plot;
                 }
                 catch (Exception er)
                 {
@@ -599,6 +644,7 @@ namespace Movie_omdb
             }
         }
 
+        //fa parte della gestione dei pulsanti delle pagine
         void reset_border_size()
         {
             Color BW = WhiteOrBlack(Properties.Settings.Default.barColor);
@@ -607,21 +653,21 @@ namespace Movie_omdb
                 Bitmap bitmap = Properties.Resources.page_button;
                 ChangeColor(bitmap, Color.Black, Properties.Settings.Default.backColor);
                 button.BackgroundImage = bitmap;
-                button.FlatAppearance.BorderSize = 0;
                 button.BackColor = Properties.Settings.Default.barColor;
                 button.ForeColor = BW;
                 button.FlatAppearance.MouseDownBackColor = Color.DimGray;
             }
         }
 
+        //quando uno dei pulsanti della gestione delle pagine corrisponde a quello della pag selezionata allora è "selezionato": cambia colori e altro
         void set_selected(Button button)
         {
-            button.FlatAppearance.BorderSize = 0;
             button.BackColor = Properties.Settings.Default.customColor;
             button.ForeColor = Properties.Settings.Default.foreColor;
             button.FlatAppearance.MouseDownBackColor = search.FlatAppearance.MouseDownBackColor;
         }
 
+        //Definisce il contenuto stringa dei 5 pulsanti delle pagine
         void generate(int from, int lenght)
         {
             for (int i = from; i < from + lenght; i++)
@@ -685,18 +731,23 @@ namespace Movie_omdb
             }
         }
 
+        //Ricava il numero totale di numero di pagine. E' anche incaricato di dare avviso se la ricerca non da risultati
         int GetAll()
         {
             int all = 1;
             if (searchResult != null)
             {
-                int allresults = 1;
-                int.TryParse(searchResult.totalResults, out allresults);
-                all = (allresults / 10) + 1;
+                if (searchResult.totalResults == null)
+                {
+                    MessageBox.Show("Nessun risultato trovato", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return 0;
+                }
+                all = int.Parse(searchResult.totalResults) / 10;
             }
             return all;
         }
 
+        //Click su uno dei 5 pulsaanti per la navigazione delle pagine
         private async void nav_click(object sender, EventArgs e)
         {
             int all = GetAll();
@@ -746,6 +797,11 @@ namespace Movie_omdb
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
             {
                 e.Handled = true;
+                if (!timer.IsRunning) //usato per determinare la pressione prolungata
+                {
+                    timer.Reset();
+                    timer.Start();
+                }
             }
         }
 
@@ -758,18 +814,64 @@ namespace Movie_omdb
                 Nselected += e.KeyCode == Keys.Right ? 1 : -1;
 
                 Nav_Buttons();
-                if (CurrentSearchString != "" && pNselected != Nselected)
+                if (!await longPress(e.KeyCode == Keys.Right ? ">" : "<")) //usato per determinare la pressione prolungata
                 {
-                    ClientReset();
-                    searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + "&page=" + Nselected + KEY);
-                    UpdateSearchList();
+                    if (CurrentSearchString != "" && pNselected != Nselected)
+                    {
+                        ClientReset();
+                        searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + "&page=" + Nselected + KEY);
+                        UpdateSearchList();
+                    }
                 }
             }
         }
 
+        //quando la finestra si ridimensiona bisogna ridimensionare anche aaltre cose a mano
         private void Omdb_main_Resize(object sender, EventArgs e)
         {
+            detail.Size = new Size(Size.Width - detail.Location.X, Size.Height - detail.Location.Y);
+            main.Size = detail.Size;
             poster_Resize(sender, e);
+        }
+
+        //evento usato per determinare la pressione prolungata
+        private void btn_mouseDown(object sender, MouseEventArgs e)
+        {
+            if (!timer.IsRunning)
+            {
+                timer.Reset();
+                timer.Start();
+            }
+        }
+
+        //pressione prolungata. Si applica ai pulsanti freccia dx e sx sia fisici che virtuali. la press. prolung. a dx porta all'ultima pag., quella sx alla prima.
+        async Task<bool> longPress(string name)
+        {
+            if (timer.IsRunning)
+            {
+                timer.Stop();
+                if (timer.ElapsedMilliseconds > 450 && (name == ">" || name == "<"))
+                {
+                    int all = GetAll();
+                    pNselected = Nselected;
+                    Nselected = (name == ">") ? all : 1;
+                    if (CurrentSearchString != "" && pNselected != Nselected)
+                    {
+                        ClientReset();
+                        edit(Nselected, all);
+                        searchResult = await GetSearchResultAsync("?s=" + CurrentSearchString + "&page=" + Nselected + KEY);
+                        UpdateSearchList();
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //evento usato per determinare la pressione prolungata
+        private async void btn_mouseUp(object sender, MouseEventArgs e)
+        {
+            await longPress((sender as Button).Text);
         }
     }
 }

@@ -18,7 +18,7 @@
       <Value Profile="(Default)">Silver</Value>
     </Setting>
     <Setting Name="styles" Type="System.String" Scope="User">
-      <Value Profile="(Default)">default;DarkOrange,Black,DimGray,DarkGray,Silver-amazon;#FEBD69,Black,#232F3F,#EAEDED,White-uci;#FFD900,Black,#00244D,#001C38,#003B7A-netflix;#B9090B,Black,Black,#1C1C1C,#252525-imdb;#F5C518,Black,#121212,Black,#101010-style1;#95A5AE,White,#517A94,#333333,#272727-rai;#29A2FF,Black,#000099,White,White-mediaset;#030405,White,#1F272F,#27303A,#27303A-style2;#3D3D3D,White,#2C2C2C,Black,#121212-telegram;#77B7E4,Black,#5682A3,White,#E7EBF0</Value>
+      <Value Profile="(Default)">default;DarkOrange,Black,DimGray,DarkGray,Silver-amazon;#FEBD69,Black,#232F3F,#EAEDED,White-uci;#FFD900,Black,#00244D,#001C38,#003B7A-netflix;#B9090B,Black,Black,#1C1C1C,#252525-imdb;#F5C518,Black,#121212,Black,#101010-style1;#95A5AE,White,#517A94,#333333,#272727-rai;#29A2FF,Black,#000099,White,White-mediaset;#030405,White,#1F272F,#27303A,#27303A-style2;#3D3D3D,White,#2C2C2C,Black,#121212-telegram;#77B7E4,Black,#5682A3,White,#E7EBF0-steam;#539CC6,Black,#171A21,#1A3C52,#1B2A3B-whatsapp;#0DD062,Black,#075E55,#E2FFC7,White-facebook;#1A2947,White,#4267B2,#E9EBEE,White</Value>
     </Setting>
   </Settings>
 </SettingsFile>

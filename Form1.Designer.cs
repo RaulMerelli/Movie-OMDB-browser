@@ -47,6 +47,26 @@
             this.desc_1 = new System.Windows.Forms.Label();
             this.desc_3 = new System.Windows.Forms.Label();
             this.detail = new System.Windows.Forms.Panel();
+            this.production = new System.Windows.Forms.Label();
+            this.dvd = new System.Windows.Forms.Label();
+            this.metascore = new System.Windows.Forms.Label();
+            this.awards = new System.Windows.Forms.Label();
+            this.desc_16 = new System.Windows.Forms.Label();
+            this.desc_15 = new System.Windows.Forms.Label();
+            this.desc_14 = new System.Windows.Forms.Label();
+            this.desc_13 = new System.Windows.Forms.Label();
+            this.boxoffice = new System.Windows.Forms.Label();
+            this.type = new System.Windows.Forms.Label();
+            this.country = new System.Windows.Forms.Label();
+            this.language = new System.Windows.Forms.Label();
+            this.desc_12 = new System.Windows.Forms.Label();
+            this.desc_10 = new System.Windows.Forms.Label();
+            this.desc_11 = new System.Windows.Forms.Label();
+            this.desc_9 = new System.Windows.Forms.Label();
+            this.writer = new System.Windows.Forms.Label();
+            this.director = new System.Windows.Forms.Label();
+            this.desc_8 = new System.Windows.Forms.Label();
+            this.desc_7 = new System.Windows.Forms.Label();
             this.desc_6 = new System.Windows.Forms.Label();
             this.genre = new System.Windows.Forms.Label();
             this.desc_5 = new System.Windows.Forms.Label();
@@ -67,6 +87,10 @@
             this.search = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.actors = new System.Windows.Forms.Label();
+            this.desc_17 = new System.Windows.Forms.Label();
+            this.plot = new System.Windows.Forms.Label();
+            this.desc_18 = new System.Windows.Forms.Label();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.main.SuspendLayout();
@@ -212,8 +236,6 @@
             // 
             // main
             // 
-            this.main.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.main.Controls.Add(this.desc_m_1);
             this.main.Controls.Add(this.desc_m_2);
             this.main.Controls.Add(this.searchtype);
@@ -292,9 +314,30 @@
             // 
             // detail
             // 
-            this.detail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.detail.Controls.Add(this.plot);
+            this.detail.Controls.Add(this.desc_18);
+            this.detail.Controls.Add(this.actors);
+            this.detail.Controls.Add(this.desc_17);
+            this.detail.Controls.Add(this.production);
+            this.detail.Controls.Add(this.dvd);
+            this.detail.Controls.Add(this.metascore);
+            this.detail.Controls.Add(this.awards);
+            this.detail.Controls.Add(this.desc_16);
+            this.detail.Controls.Add(this.desc_15);
+            this.detail.Controls.Add(this.desc_14);
+            this.detail.Controls.Add(this.desc_13);
+            this.detail.Controls.Add(this.boxoffice);
+            this.detail.Controls.Add(this.type);
+            this.detail.Controls.Add(this.country);
+            this.detail.Controls.Add(this.language);
+            this.detail.Controls.Add(this.desc_12);
+            this.detail.Controls.Add(this.desc_10);
+            this.detail.Controls.Add(this.desc_11);
+            this.detail.Controls.Add(this.desc_9);
+            this.detail.Controls.Add(this.writer);
+            this.detail.Controls.Add(this.director);
+            this.detail.Controls.Add(this.desc_8);
+            this.detail.Controls.Add(this.desc_7);
             this.detail.Controls.Add(this.desc_6);
             this.detail.Controls.Add(this.genre);
             this.detail.Controls.Add(this.desc_5);
@@ -309,9 +352,229 @@
             this.detail.Controls.Add(this.rated);
             this.detail.Location = new System.Drawing.Point(592, 66);
             this.detail.Name = "detail";
-            this.detail.Size = new System.Drawing.Size(298, 294);
+            this.detail.Size = new System.Drawing.Size(298, 588);
             this.detail.TabIndex = 25;
             this.detail.Visible = false;
+            // 
+            // production
+            // 
+            this.production.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.production.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.production.Location = new System.Drawing.Point(98, 389);
+            this.production.Name = "production";
+            this.production.Size = new System.Drawing.Size(188, 18);
+            this.production.TabIndex = 65;
+            this.production.Text = "-";
+            // 
+            // dvd
+            // 
+            this.dvd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dvd.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dvd.Location = new System.Drawing.Point(78, 367);
+            this.dvd.Name = "dvd";
+            this.dvd.Size = new System.Drawing.Size(208, 18);
+            this.dvd.TabIndex = 64;
+            this.dvd.Text = "-";
+            // 
+            // metascore
+            // 
+            this.metascore.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.metascore.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.metascore.Location = new System.Drawing.Point(95, 345);
+            this.metascore.Name = "metascore";
+            this.metascore.Size = new System.Drawing.Size(191, 18);
+            this.metascore.TabIndex = 63;
+            this.metascore.Text = "-";
+            // 
+            // awards
+            // 
+            this.awards.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.awards.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.awards.Location = new System.Drawing.Point(78, 323);
+            this.awards.Name = "awards";
+            this.awards.Size = new System.Drawing.Size(208, 18);
+            this.awards.TabIndex = 62;
+            this.awards.Text = "-";
+            // 
+            // desc_16
+            // 
+            this.desc_16.AutoSize = true;
+            this.desc_16.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_16.Location = new System.Drawing.Point(3, 389);
+            this.desc_16.Name = "desc_16";
+            this.desc_16.Size = new System.Drawing.Size(92, 22);
+            this.desc_16.TabIndex = 61;
+            this.desc_16.Text = "Produzione: ";
+            this.desc_16.UseCompatibleTextRendering = true;
+            // 
+            // desc_15
+            // 
+            this.desc_15.AutoSize = true;
+            this.desc_15.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_15.Location = new System.Drawing.Point(3, 367);
+            this.desc_15.Name = "desc_15";
+            this.desc_15.Size = new System.Drawing.Size(47, 22);
+            this.desc_15.TabIndex = 60;
+            this.desc_15.Text = "DVD: ";
+            this.desc_15.UseCompatibleTextRendering = true;
+            // 
+            // desc_14
+            // 
+            this.desc_14.AutoSize = true;
+            this.desc_14.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_14.Location = new System.Drawing.Point(3, 345);
+            this.desc_14.Name = "desc_14";
+            this.desc_14.Size = new System.Drawing.Size(86, 22);
+            this.desc_14.TabIndex = 59;
+            this.desc_14.Text = "Metascore: ";
+            this.desc_14.UseCompatibleTextRendering = true;
+            // 
+            // desc_13
+            // 
+            this.desc_13.AutoSize = true;
+            this.desc_13.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_13.Location = new System.Drawing.Point(3, 323);
+            this.desc_13.Name = "desc_13";
+            this.desc_13.Size = new System.Drawing.Size(54, 22);
+            this.desc_13.TabIndex = 58;
+            this.desc_13.Text = "Premi: ";
+            this.desc_13.UseCompatibleTextRendering = true;
+            // 
+            // boxoffice
+            // 
+            this.boxoffice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.boxoffice.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.boxoffice.Location = new System.Drawing.Point(78, 301);
+            this.boxoffice.Name = "boxoffice";
+            this.boxoffice.Size = new System.Drawing.Size(208, 18);
+            this.boxoffice.TabIndex = 55;
+            this.boxoffice.Text = "-";
+            // 
+            // type
+            // 
+            this.type.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.type.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.type.Location = new System.Drawing.Point(78, 279);
+            this.type.Name = "type";
+            this.type.Size = new System.Drawing.Size(208, 18);
+            this.type.TabIndex = 54;
+            this.type.Text = "-";
+            // 
+            // country
+            // 
+            this.country.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.country.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.country.Location = new System.Drawing.Point(125, 257);
+            this.country.Name = "country";
+            this.country.Size = new System.Drawing.Size(161, 18);
+            this.country.TabIndex = 53;
+            this.country.Text = "-";
+            // 
+            // language
+            // 
+            this.language.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.language.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.language.Location = new System.Drawing.Point(125, 235);
+            this.language.Name = "language";
+            this.language.Size = new System.Drawing.Size(161, 18);
+            this.language.TabIndex = 52;
+            this.language.Text = "-";
+            // 
+            // desc_12
+            // 
+            this.desc_12.AutoSize = true;
+            this.desc_12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_12.Location = new System.Drawing.Point(3, 301);
+            this.desc_12.Name = "desc_12";
+            this.desc_12.Size = new System.Drawing.Size(67, 22);
+            this.desc_12.TabIndex = 51;
+            this.desc_12.Text = "Incasso: ";
+            this.desc_12.UseCompatibleTextRendering = true;
+            // 
+            // desc_10
+            // 
+            this.desc_10.AutoSize = true;
+            this.desc_10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_10.Location = new System.Drawing.Point(3, 257);
+            this.desc_10.Name = "desc_10";
+            this.desc_10.Size = new System.Drawing.Size(120, 22);
+            this.desc_10.TabIndex = 51;
+            this.desc_10.Text = "Paese d\'origine: ";
+            this.desc_10.UseCompatibleTextRendering = true;
+            // 
+            // desc_11
+            // 
+            this.desc_11.AutoSize = true;
+            this.desc_11.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_11.Location = new System.Drawing.Point(3, 279);
+            this.desc_11.Name = "desc_11";
+            this.desc_11.Size = new System.Drawing.Size(44, 22);
+            this.desc_11.TabIndex = 50;
+            this.desc_11.Text = "Tipo: ";
+            this.desc_11.UseCompatibleTextRendering = true;
+            // 
+            // desc_9
+            // 
+            this.desc_9.AutoSize = true;
+            this.desc_9.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_9.Location = new System.Drawing.Point(3, 235);
+            this.desc_9.Name = "desc_9";
+            this.desc_9.Size = new System.Drawing.Size(123, 22);
+            this.desc_9.TabIndex = 50;
+            this.desc_9.Text = "Lingua originale: ";
+            this.desc_9.UseCompatibleTextRendering = true;
+            // 
+            // writer
+            // 
+            this.writer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.writer.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.writer.Location = new System.Drawing.Point(78, 191);
+            this.writer.Name = "writer";
+            this.writer.Size = new System.Drawing.Size(208, 44);
+            this.writer.TabIndex = 46;
+            this.writer.Text = "-";
+            // 
+            // director
+            // 
+            this.director.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.director.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.director.Location = new System.Drawing.Point(78, 169);
+            this.director.Name = "director";
+            this.director.Size = new System.Drawing.Size(217, 18);
+            this.director.TabIndex = 45;
+            this.director.Text = "-";
+            // 
+            // desc_8
+            // 
+            this.desc_8.AutoSize = true;
+            this.desc_8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_8.Location = new System.Drawing.Point(3, 191);
+            this.desc_8.Name = "desc_8";
+            this.desc_8.Size = new System.Drawing.Size(71, 22);
+            this.desc_8.TabIndex = 44;
+            this.desc_8.Text = "Scrittore: ";
+            this.desc_8.UseCompatibleTextRendering = true;
+            // 
+            // desc_7
+            // 
+            this.desc_7.AutoSize = true;
+            this.desc_7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_7.Location = new System.Drawing.Point(3, 169);
+            this.desc_7.Name = "desc_7";
+            this.desc_7.Size = new System.Drawing.Size(66, 22);
+            this.desc_7.TabIndex = 43;
+            this.desc_7.Text = "Regista: ";
+            this.desc_7.UseCompatibleTextRendering = true;
             // 
             // desc_6
             // 
@@ -387,7 +650,7 @@
             this.panel2.Controls.Add(this.b_2);
             this.panel2.Controls.Add(this.b_4);
             this.panel2.Controls.Add(this.b_3);
-            this.panel2.Location = new System.Drawing.Point(85, 310);
+            this.panel2.Location = new System.Drawing.Point(85, 591);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(204, 36);
             this.panel2.TabIndex = 31;
@@ -405,6 +668,8 @@
             this.b_1.Text = "b_1";
             this.b_1.UseVisualStyleBackColor = false;
             this.b_1.Click += new System.EventHandler(this.nav_click);
+            this.b_1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btn_mouseDown);
+            this.b_1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btn_mouseUp);
             // 
             // b_5
             // 
@@ -419,6 +684,8 @@
             this.b_5.Text = "b_5";
             this.b_5.UseVisualStyleBackColor = false;
             this.b_5.Click += new System.EventHandler(this.nav_click);
+            this.b_5.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btn_mouseDown);
+            this.b_5.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btn_mouseUp);
             // 
             // b_2
             // 
@@ -433,6 +700,8 @@
             this.b_2.Text = "b_2";
             this.b_2.UseVisualStyleBackColor = false;
             this.b_2.Click += new System.EventHandler(this.nav_click);
+            this.b_2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btn_mouseDown);
+            this.b_2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btn_mouseUp);
             // 
             // b_4
             // 
@@ -447,6 +716,8 @@
             this.b_4.Text = "b_4";
             this.b_4.UseVisualStyleBackColor = false;
             this.b_4.Click += new System.EventHandler(this.nav_click);
+            this.b_4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btn_mouseDown);
+            this.b_4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btn_mouseUp);
             // 
             // b_3
             // 
@@ -474,7 +745,7 @@
             this.searchlist.ItemHeight = 24;
             this.searchlist.Location = new System.Drawing.Point(0, 33);
             this.searchlist.Name = "searchlist";
-            this.searchlist.Size = new System.Drawing.Size(349, 168);
+            this.searchlist.Size = new System.Drawing.Size(349, 432);
             this.searchlist.TabIndex = 9;
             this.searchlist.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.searchlist_DrawItem);
             this.searchlist.SelectedIndexChanged += new System.EventHandler(this.searchlist_SelectedIndexChanged);
@@ -491,14 +762,14 @@
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(12, 66);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(349, 235);
+            this.panel1.Size = new System.Drawing.Size(349, 516);
             this.panel1.TabIndex = 16;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBox2.BackgroundImage = global::Movie_omdb.Properties.Resources.list_bottom;
-            this.pictureBox2.Location = new System.Drawing.Point(0, 201);
+            this.pictureBox2.Location = new System.Drawing.Point(0, 482);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(349, 34);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -524,7 +795,7 @@
             this.poster.MaximumSize = new System.Drawing.Size(300, 380);
             this.poster.MinimumSize = new System.Drawing.Size(165, 209);
             this.poster.Name = "poster";
-            this.poster.Size = new System.Drawing.Size(220, 293);
+            this.poster.Size = new System.Drawing.Size(220, 380);
             this.poster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.poster.TabIndex = 8;
             this.poster.TabStop = false;
@@ -554,7 +825,7 @@
             this.pictureBox3.BackgroundImage = global::Movie_omdb.Properties.Resources.separator;
             this.pictureBox3.Location = new System.Drawing.Point(0, 39);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(890, 14);
+            this.pictureBox3.Size = new System.Drawing.Size(987, 14);
             this.pictureBox3.TabIndex = 21;
             this.pictureBox3.TabStop = false;
             // 
@@ -565,15 +836,59 @@
             this.pictureBox4.BackColor = System.Drawing.Color.Black;
             this.pictureBox4.Location = new System.Drawing.Point(0, 0);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(890, 53);
+            this.pictureBox4.Size = new System.Drawing.Size(987, 53);
             this.pictureBox4.TabIndex = 22;
             this.pictureBox4.TabStop = false;
+            // 
+            // actors
+            // 
+            this.actors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.actors.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.actors.Location = new System.Drawing.Point(78, 411);
+            this.actors.Name = "actors";
+            this.actors.Size = new System.Drawing.Size(208, 44);
+            this.actors.TabIndex = 67;
+            this.actors.Text = "-";
+            // 
+            // desc_17
+            // 
+            this.desc_17.AutoSize = true;
+            this.desc_17.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_17.Location = new System.Drawing.Point(3, 411);
+            this.desc_17.Name = "desc_17";
+            this.desc_17.Size = new System.Drawing.Size(50, 22);
+            this.desc_17.TabIndex = 66;
+            this.desc_17.Text = "Attori: ";
+            this.desc_17.UseCompatibleTextRendering = true;
+            // 
+            // plot
+            // 
+            this.plot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.plot.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plot.Location = new System.Drawing.Point(62, 461);
+            this.plot.Name = "plot";
+            this.plot.Size = new System.Drawing.Size(224, 100);
+            this.plot.TabIndex = 69;
+            this.plot.Text = "-";
+            // 
+            // desc_18
+            // 
+            this.desc_18.AutoSize = true;
+            this.desc_18.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desc_18.Location = new System.Drawing.Point(3, 461);
+            this.desc_18.Name = "desc_18";
+            this.desc_18.Size = new System.Drawing.Size(59, 22);
+            this.desc_18.TabIndex = 68;
+            this.desc_18.Text = "Trama: ";
+            this.desc_18.UseCompatibleTextRendering = true;
             // 
             // Omdb_main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.DarkGray;
-            this.ClientSize = new System.Drawing.Size(890, 374);
+            this.ClientSize = new System.Drawing.Size(987, 655);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.detail);
             this.Controls.Add(this.panel3);
@@ -649,5 +964,29 @@
         private System.Windows.Forms.Label runtime;
         private System.Windows.Forms.Label desc_4;
         private System.Windows.Forms.Label released;
+        private System.Windows.Forms.Label desc_8;
+        private System.Windows.Forms.Label desc_7;
+        private System.Windows.Forms.Label writer;
+        private System.Windows.Forms.Label director;
+        private System.Windows.Forms.Label boxoffice;
+        private System.Windows.Forms.Label type;
+        private System.Windows.Forms.Label country;
+        private System.Windows.Forms.Label language;
+        private System.Windows.Forms.Label desc_12;
+        private System.Windows.Forms.Label desc_10;
+        private System.Windows.Forms.Label desc_11;
+        private System.Windows.Forms.Label desc_9;
+        private System.Windows.Forms.Label production;
+        private System.Windows.Forms.Label dvd;
+        private System.Windows.Forms.Label metascore;
+        private System.Windows.Forms.Label awards;
+        private System.Windows.Forms.Label desc_16;
+        private System.Windows.Forms.Label desc_15;
+        private System.Windows.Forms.Label desc_14;
+        private System.Windows.Forms.Label desc_13;
+        private System.Windows.Forms.Label actors;
+        private System.Windows.Forms.Label desc_17;
+        private System.Windows.Forms.Label plot;
+        private System.Windows.Forms.Label desc_18;
     }
 }
