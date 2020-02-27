@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Omdb_main));
             this.ricerca = new System.Windows.Forms.TextBox();
             this.generic = new System.Windows.Forms.Label();
             this.details = new System.Windows.Forms.Label();
@@ -900,9 +901,10 @@
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(762, 328);
             this.Name = "Omdb_main";
-            this.Text = "Form1";
+            this.Text = "Movie OMDB browser";
             this.Resize += new System.EventHandler(this.Omdb_main_Resize);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
