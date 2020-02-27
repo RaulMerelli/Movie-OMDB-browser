@@ -66,7 +66,7 @@ Use those commands to change the color of the specified program parts.
 command=color
 
 
-the color should be defined in HTML standard naming or in #HEX format.
+the color have to be defined in HTML standard naming or in #HEX format.
 
 
 ### Style change
@@ -78,7 +78,7 @@ the color should be defined in HTML standard naming or in #HEX format.
 
 -savestyle
 
--changestyle
+-deletestyle
 
 
 Use those commands to change the set of colors of the entire program.
